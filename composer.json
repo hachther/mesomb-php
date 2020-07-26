@@ -1,0 +1,19 @@
+{
+    "name": "hachther/mesomb",
+    "description": "Mobile payment via MeSomb",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3.1|^7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hachther Co.",
+            "email": "hachther@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {"Hachther\\MeSomb\\": "src/"}
+    }
+}
