@@ -5,6 +5,8 @@ Beform you can use this you must register on MeSomb [here](https://mesomb.hachth
 
 ## Sample code
 
+### Make payment
+
 ```PHP
 <?php
 
@@ -14,4 +16,19 @@ use Hachther\MeSomb\Client;
 
 $client = new Client('-----Application-Key------');
 $client->makePayment('237670707070', 25, 'MTN');
+```
+
+### Make deposit
+
+```PHP
+<?php
+
+require('vendor/autoload.php');
+
+use Hachther\MeSomb\Client;
+
+$client = new Client('-----Application-Key------');
+$client->setPin('----Deposit PIN Code -----');
+$client->setApiKey('------ Authentication Key ----');
+$client->makeDeposit('237670707070', 25, 'MTN');
 ```
