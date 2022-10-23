@@ -19,7 +19,7 @@ use MeSomb\Signature;
 /**
  * Containing all operations provided by MeSomb Payment Service.
  *
- * [Check the documentation here](https://mesomb.hachther.com/en/api/schema/)
+ * [Check the documentation here](https://mesomb.hachther.com/en/api/v1.1/schema/)
  */
 class PaymentOperation
 {
