@@ -1,0 +1,35 @@
+{
+    "name": "hachther/phpmesomb",
+    "description": "Php client for MeSomb services",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MeSomb\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/PaymentTest.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Hachther LLC",
+            "email": "contact@hachther.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hachther/phpmesomb.git"
+        }
+    ]
+}
