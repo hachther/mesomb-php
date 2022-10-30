@@ -63,7 +63,7 @@ class CollectTest extends TestCase
         $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
         $nonce = Signature::nonceGenerator();
 
-        $response = $payment->makeCollect(100, 'MTN', '677550203', new DateTime(), $nonce, 'CM', 'XAF', true, 'asynchronous');
+        $response = $payment->makeCollect(100, 'MTN', '677550203', new DateTime(), $nonce, null, 'CM', 'XAF', true, 'asynchronous');
         $this->assertTrue($response->isOperationSuccess());
         $this->assertFalse($response->isTransactionSuccess());
     }

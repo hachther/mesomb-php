@@ -97,6 +97,7 @@ class PaymentOperation
      * @param string $payer account number to collect from
      * @param DateTime $date date of the request
      * @param string $nonce unique string on each request
+     * @param string $trxID unique string in your local system
      * @param string $country country CM, NE
      * @param string $currency code of the currency of the amount
      * @param bool $feesIncluded if your want MeSomb to include and compute fees in the amount to collect
@@ -120,6 +121,7 @@ class PaymentOperation
         string $payer,
         DateTime $date,
         string $nonce,
+        string $trxID = null,
         string $country = 'CM',
         string $currency = 'XAF',
         bool $feesIncluded = true,
@@ -157,18 +159,23 @@ class PaymentOperation
 
         $authorization = $this->getAuthorization('POST', $endpoint, $date, $nonce, ['content-type' => 'application/json'], $body);
 
+        $headers = [
+            'x-mesomb-date' => $date->getTimestamp(),
+            'x-mesomb-nonce' => $nonce,
+            'Authorization' => $authorization,
+            'Content-Type'     => 'application/json',
+            'X-MeSomb-Application' => $this->applicationKey,
+            'X-MeSomb-OperationMode' => $mode,
+        ];
+        if (!is_null($trxID)) {
+            $headers['X-MeSomb-TrxID'] = $trxID;
+        }
+
         $client = new Client();
         try {
             $response = $client->post($url, [
                 'body' => json_encode($body, JSON_UNESCAPED_SLASHES),
-                'headers' => [
-                    'x-mesomb-date' => $date->getTimestamp(),
-                    'x-mesomb-nonce' => $nonce,
-                    'Authorization' => $authorization,
-                    'Content-Type'     => 'application/json',
-                    'X-MeSomb-Application' => $this->applicationKey,
-                    'X-MeSomb-OperationMode' => $mode,
-                ]
+                'headers' => $headers
             ]);
             return new TransactionResponse(json_decode($response->getBody()->getContents(), true));
         } catch (ClientException $exception) {
@@ -187,6 +194,7 @@ class PaymentOperation
      * @param string $receiver receiver account (in the local phone number)
      * @param DateTime $date date of the request
      * @param string $nonce Unique key generated for each transaction
+     * @param string $trxID ID of the transaction in your local system
      * @param string $country country code 'CM' by default
      * @param string $currency currency of the transaction (XAF, XOF, ...) XAF by default
      * @param array|null $extra Extra parameter to send in the body check the API documentation
@@ -197,7 +205,7 @@ class PaymentOperation
      * @throws ServiceNotFoundException
      * @throws GuzzleException
      */
-    public function makeDeposit(int $amount, string $service, string $receiver, DateTime $date, string $nonce, string $country = 'CM', string $currency = 'XAF', array $extra = null) {
+    public function makeDeposit(int $amount, string $service, string $receiver, DateTime $date, string $nonce, string $trxID = null, string $country = 'CM', string $currency = 'XAF', array $extra = null) {
         $endpoint = 'payment/deposit/';
         $url = $this->buildUrl($endpoint);
 
@@ -215,17 +223,22 @@ class PaymentOperation
 
         $authorization = $this->getAuthorization('POST', $endpoint, $date, $nonce, ['content-type' => 'application/json'], $body);
 
+        $headers = [
+            'x-mesomb-date' => $date->getTimestamp(),
+            'x-mesomb-nonce' => $nonce,
+            'Authorization' => $authorization,
+            'Content-Type'     => 'application/json',
+            'X-MeSomb-Application' => $this->applicationKey,
+        ];
+        if (!is_null($trxID)) {
+            $headers['X-MeSomb-TrxID'] = $trxID;
+        }
+
         $client = new Client();
         try {
             $response = $client->post($url, [
                 'body' => json_encode($body, JSON_UNESCAPED_SLASHES),
-                'headers' => [
-                    'x-mesomb-date' => $date->getTimestamp(),
-                    'x-mesomb-nonce' => $nonce,
-                    'Authorization' => $authorization,
-                    'Content-Type'     => 'application/json',
-                    'X-MeSomb-Application' => $this->applicationKey,
-                ]
+                'headers' => $headers
             ]);
             return new TransactionResponse(json_decode($response->getBody()->getContents(), true));
         } catch (ClientException $exception) {
