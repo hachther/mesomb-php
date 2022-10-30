@@ -5,10 +5,10 @@ namespace MeSomb\Model;
 class TransactionResponse
 {
     private bool $success;
-    private string $message;
-    private string $redirect;
+    private ?string $message;
+    private ?string $redirect;
     private array $data;
-    private string $reference;
+    private ?string $reference;
     private string $status;
 
     public function __construct($data)
