@@ -67,4 +67,23 @@ class CollectTest extends TestCase
         $this->assertTrue($response->isOperationSuccess());
         $this->assertFalse($response->isTransactionSuccess());
     }
+
+    public function testMakeCollectWithProductSuccess()
+    {
+        $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
+        $nonce = Signature::nonceGenerator();
+
+        $products = [
+            [
+                'id' => '1',
+                'name' => 'Sac a Dos',
+                'quantity' => 1,
+                'amount' => 100
+            ]
+        ];
+
+        $response = $payment->makeCollect(100, 'MTN', '677550203', new DateTime(), $nonce, null, 'CM', 'XAF', true, 'synchronous', false, null, null, $products);
+        $this->assertTrue($response->isOperationSuccess());
+        $this->assertTrue($response->isTransactionSuccess());
+    }
 }

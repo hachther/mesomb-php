@@ -105,7 +105,15 @@ class PaymentOperation
      * @param bool $conversion In case of foreign currently defined if you want to rely on MeSomb to convert the amount in the local currency
      * @param array|null $location dict containing the location of the customer check the documentation
      * @param array|null $customer dict containing information of the customer check the documentation
-     * @param array|null $product dict containing information of the product check the documentation
+     * @param array|null $products list of product contains in the transaction Example: $products = [
+     *  [
+     *      'id' => 'product_id',
+     *      'name' => 'Product Name',
+     *      'category' => 'Product Category',
+     *      'quatity' => 1,
+     *      'amount' => 10000
+     *  ]
+     * ]
      * @param array|null $extra Extra parameter to send in the body check the API documentation
      *
      * @return TransactionResponse|void
@@ -129,7 +137,7 @@ class PaymentOperation
         bool $conversion = false,
         array $location = null,
         array $customer = null,
-        array $product = null,
+        array $products = null,
         array $extra = null
     ) {
         $endpoint = 'payment/collect/';
@@ -144,14 +152,14 @@ class PaymentOperation
             'fees' => $feesIncluded,
             'conversion' => $conversion,
         ];
-        if ($location != null) {
+        if (!is_null($location)) {
             $body['location'] = $location;
         }
-        if ($customer != null) {
-            $body['customer'] = $currency;
+        if (!is_null($customer)) {
+            $body['customer'] = $customer;
         }
-        if ($product != null) {
-            $body['product'] = $product;
+        if (!is_null($products)) {
+            $body['products'] = $products;
         }
         if ($extra != null) {
             $body = array_merge($body, $extra);
