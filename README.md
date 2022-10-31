@@ -32,7 +32,7 @@ All API related to the payment service available in ```MeSomb\Operation\PaymentO
 
 | Method                                                                                        | Endpoint              | Description                                        |
 |-----------------------------------------------------------------------------------------------|-----------------------|----------------------------------------------------|
-| [makeCollect](docs/classes/MeSomb-Operation-PaymentOperation.html#method_makeCollect)         | payment/collect/      | Collect money from a mobile account                |
+| [makeCollect](docs/README.md#PaymentOperationmakeCollect)                                     | payment/collect/      | Collect money from a mobile account                |
 | [makeDeposit](docs/classes/MeSomb-Operation-PaymentOperation.html#method_makeDeposit)         | payment/deposit/      | Make a deposit in a receiver mobile account        |
 | [updateSecurity](docs/classes/MeSomb-Operation-PaymentOperation.html#method_updateSecurity)   | payment/security/     | Update security settings of your service on MeSomb |
 | [getStatus](docs/classes/MeSomb-Operation-PaymentOperation.html#method_getStatus)             | payment/status/       | Get the current status of your service on MeSomb   |
