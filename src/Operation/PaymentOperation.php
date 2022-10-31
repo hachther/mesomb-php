@@ -89,15 +89,14 @@ class PaymentOperation
     }
 
     /**
-     * Collect money a use account
-     * [Check the documentation here](https://mesomb.hachther.com/en/api/schema/)
+     * Collect money from a mobile account
      *
      * @param int $amount amount to collect
      * @param string $service MTN, ORANGE, AIRTEL
      * @param string $payer account number to collect from
      * @param DateTime $date date of the request
      * @param string $nonce unique string on each request
-     * @param string $trxID unique string in your local system
+     * @param string|null $trxID unique string in your local system
      * @param string $country country CM, NE
      * @param string $currency code of the currency of the amount
      * @param bool $feesIncluded if your want MeSomb to include and compute fees in the amount to collect
@@ -117,11 +116,11 @@ class PaymentOperation
      * @param array|null $extra Extra parameter to send in the body check the API documentation
      *
      * @return TransactionResponse|void
+     * @throws GuzzleException
      * @throws InvalidClientRequestException
      * @throws PermissionDeniedException
      * @throws ServerException
      * @throws ServiceNotFoundException
-     * @throws GuzzleException
      */
     public function makeCollect(
         int $amount,
@@ -194,8 +193,7 @@ class PaymentOperation
     }
 
     /**
-     * Method to make a deposit in a receiver mobile account.
-     * [Check the documentation here](https://mesomb.hachther.com/en/api/schema/)
+     * Make a deposit in a receiver mobile account.
      *
      * @param int $amount the amount of the transaction
      * @param string $service service code (MTN, ORANGE, AIRTEL, ...)
@@ -257,7 +255,7 @@ class PaymentOperation
     }
 
     /**
-     * Update security parameters of your service on MeSomb
+     * Update security settings of your service on MeSomb
      *
      * @param string $field which security field you want to update (check API documentation)
      * @param string $action SET or UNSET
