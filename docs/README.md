@@ -399,7 +399,7 @@ PaymentOperation::__construct( string applicationKey, string accessKey, string s
 Collect money from a mobile account
 
 ```php
-PaymentOperation::makeCollect( int amount, string service, string payer, \DateTime date, string nonce, string|null trxID = null, string country = 'CM', string currency = 'XAF', bool feesIncluded = true, string mode = 'synchronous', bool conversion = false, array|null location = null, array|null customer = null, array|null products = null, array|null extra = null ): \MeSomb\Model\TransactionResponse|void
+PaymentOperation::makeCollect( int amount, string service, string payer, \DateTime date, string nonce, string|null trxID = null, string country = 'CM', string currency = 'XAF', bool feesIncluded = true, string mode = 'synchronous', bool conversion = false, array&lt;string,string&gt;|null location = null, array&lt;string,string&gt;|null customer = null, array&lt;string,string&gt;[]|null products = null, array|null extra = null ): \MeSomb\Model\TransactionResponse|void
 ```
 
 
@@ -420,17 +420,9 @@ PaymentOperation::makeCollect( int amount, string service, string payer, \DateTi
 | `feesIncluded` | **bool** | if your want MeSomb to include and compute fees in the amount to collect |
 | `mode` | **string** | asynchronous or synchronous |
 | `conversion` | **bool** | In case of foreign currently defined if you want to rely on MeSomb to convert the amount in the local currency |
-| `location` | **array\|null** | dict containing the location of the customer check the documentation |
-| `customer` | **array\|null** | dict containing information of the customer check the documentation |
-| `products` | **array\|null** | list of product contains in the transaction Example: $products = [
- [
-     &#039;id&#039; =&gt; &#039;product_id&#039;,
-     &#039;name&#039; =&gt; &#039;Product Name&#039;,
-     &#039;category&#039; =&gt; &#039;Product Category&#039;,
-     &#039;quatity&#039; =&gt; 1,
-     &#039;amount&#039; =&gt; 10000
- ]
-] |
+| `location` | **array&lt;string,string&gt;\|null** | array-key containing the location of the customer ({town: string, region: string, country: string}) check the documentation. |
+| `customer` | **array&lt;string,string&gt;\|null** | array-key containing information of the customer ({email: string, phone: string, town: string, region: string, country: string, first_name: string, last_name: string, address: string}) check the documentation |
+| `products` | **array&lt;string,string&gt;[]\|null** | array of product contained in the transaction. Product in this format array{id: string, name: string, category: ?string, quantity: int, amount: float} |
 | `extra` | **array\|null** | Extra parameter to send in the body check the API documentation |
 
 

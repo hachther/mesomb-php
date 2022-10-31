@@ -30,13 +30,13 @@ composer require hachther/mesomb
 
 All API related to the payment service available in ```MeSomb\Operation\PaymentOperation```
 
-| Method                                                                                        | Endpoint              | Description                                        |
-|-----------------------------------------------------------------------------------------------|-----------------------|----------------------------------------------------|
-| [makeCollect](docs/README.md#PaymentOperationmakeCollect)                                     | payment/collect/      | Collect money from a mobile account                |
-| [makeDeposit](docs/classes/MeSomb-Operation-PaymentOperation.html#method_makeDeposit)         | payment/deposit/      | Make a deposit in a receiver mobile account        |
-| [updateSecurity](docs/classes/MeSomb-Operation-PaymentOperation.html#method_updateSecurity)   | payment/security/     | Update security settings of your service on MeSomb |
-| [getStatus](docs/classes/MeSomb-Operation-PaymentOperation.html#method_getStatus)             | payment/status/       | Get the current status of your service on MeSomb   |
-| [getTransactions](docs/classes/MeSomb-Operation-PaymentOperation.html#method_getTransactions) | payment/transactions/ | Get transactions from MeSomb by IDs.               |
+| Method                                                            | Endpoint              | Description                                        |
+|-------------------------------------------------------------------|-----------------------|----------------------------------------------------|
+| [makeCollect](docs/README.md#PaymentOperationmakeCollect)         | payment/collect/      | Collect money from a mobile account                |
+| [makeDeposit](docs/README.md#PaymentOperationmakeDeposit)         | payment/deposit/      | Make a deposit in a receiver mobile account        |
+| [updateSecurity](docs/README.md#PaymentOperationupdateSecurity)   | payment/security/     | Update security settings of your service on MeSomb |
+| [getStatus](docs/README.md#PaymentOperationgetStatus)             | payment/status/       | Get the current status of your service on MeSomb   |
+| [getTransactions](docs/README.md#PaymentOperationgetTransactions) | payment/transactions/ | Get transactions from MeSomb by IDs.               |
 
 
 ## Usage

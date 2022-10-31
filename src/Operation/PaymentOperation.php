@@ -102,17 +102,9 @@ class PaymentOperation
      * @param bool $feesIncluded if your want MeSomb to include and compute fees in the amount to collect
      * @param string $mode asynchronous or synchronous
      * @param bool $conversion In case of foreign currently defined if you want to rely on MeSomb to convert the amount in the local currency
-     * @param array|null $location dict containing the location of the customer check the documentation
-     * @param array|null $customer dict containing information of the customer check the documentation
-     * @param array|null $products list of product contains in the transaction Example: $products = [
-     *  [
-     *      'id' => 'product_id',
-     *      'name' => 'Product Name',
-     *      'category' => 'Product Category',
-     *      'quatity' => 1,
-     *      'amount' => 10000
-     *  ]
-     * ]
+     * @param array<string, string>|null $location array-key containing the location of the customer ({town: string, region: string, country: string}) check the documentation.
+     * @param array<string, string>|null $customer array-key containing information of the customer ({email: string, phone: string, town: string, region: string, country: string, first_name: string, last_name: string, address: string}) check the documentation
+     * @param array<array<string, string>>|null $products array of product contained in the transaction. Product in this format array{id: string, name: string, category: ?string, quantity: int, amount: float}
      * @param array|null $extra Extra parameter to send in the body check the API documentation
      *
      * @return TransactionResponse|void
