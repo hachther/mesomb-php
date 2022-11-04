@@ -2,3 +2,4 @@
 vendor
 .idea
 .phpdoc
+phpdoc-markdown

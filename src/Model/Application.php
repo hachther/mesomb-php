@@ -10,9 +10,9 @@ class Application
     private string $key;
 
     /**
-     * @var string url of your logo
+     * @var string|null url of your logo
      */
-    private string $logo;
+    private ?string $logo;
 
     /**
      * @var array your current balance in your different account
@@ -25,9 +25,9 @@ class Application
     private array $countries;
 
     /**
-     * @var string description of your service at MeSomb
+     * @var string|null description of your service at MeSomb
      */
-    private string $description;
+    private ?string $description;
 
     /**
      * @var bool if your app can receive live transaction
@@ -50,9 +50,9 @@ class Application
     private string $status;
 
     /**
-     * @var string the url of your service
+     * @var string|null the url of your service
      */
-    private string $url;
+    private ?string $url;
 
     public function __construct($data) {
         $this->key = $data['key'];

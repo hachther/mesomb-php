@@ -99,7 +99,7 @@ class PaymentOperation
      * @param string|null $trxID unique string in your local system
      * @param string $country country CM, NE
      * @param string $currency code of the currency of the amount
-     * @param bool $feesIncluded if your want MeSomb to include and compute fees in the amount to collect
+     * @param bool $feesIncluded if you want MeSomb to deduct he fees in the collected amount
      * @param string $mode asynchronous or synchronous
      * @param bool $conversion In case of foreign currently defined if you want to rely on MeSomb to convert the amount in the local currency
      * @param array<string, string>|null $location array-key containing the location of the customer ({town: string, region: string, country: string}) check the documentation.
@@ -192,16 +192,16 @@ class PaymentOperation
      * @param string $receiver receiver account (in the local phone number)
      * @param DateTime $date date of the request
      * @param string $nonce Unique key generated for each transaction
-     * @param string $trxID ID of the transaction in your local system
+     * @param string|null $trxID ID of the transaction in your local system
      * @param string $country country code 'CM' by default
      * @param string $currency currency of the transaction (XAF, XOF, ...) XAF by default
      * @param array|null $extra Extra parameter to send in the body check the API documentation
      * @return TransactionResponse|void
+     * @throws GuzzleException
      * @throws InvalidClientRequestException
      * @throws PermissionDeniedException
      * @throws ServerException
      * @throws ServiceNotFoundException
-     * @throws GuzzleException
      */
     public function makeDeposit(int $amount, string $service, string $receiver, DateTime $date, string $nonce, string $trxID = null, string $country = 'CM', string $currency = 'XAF', array $extra = null) {
         $endpoint = 'payment/deposit/';
