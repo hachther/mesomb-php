@@ -7,52 +7,52 @@ class Application
     /**
      * @var string Application key
      */
-    private string $key;
+    private $key;
 
     /**
      * @var string|null url of your logo
      */
-    private ?string $logo;
+    private $logo;
 
     /**
      * @var array your current balance in your different account
      */
-    private array $balances;
+    private $balances;
 
     /**
      * @var array list of countries where your service is available
      */
-    private array $countries;
+    private $countries;
 
     /**
      * @var string|null description of your service at MeSomb
      */
-    private ?string $description;
+    private $description;
 
     /**
      * @var bool if your app can receive live transaction
      */
-    private bool $isLive;
+    private $isLive;
 
     /**
      * @var string the name of your service
      */
-    private string $name;
+    private $name;
 
     /**
      * @var array security setting of your service at MeSomb
      */
-    private array $security;
+    private $security;
 
     /**
      * @var string current status of your application
      */
-    private string $status;
+    private $status;
 
     /**
      * @var string|null the url of your service
      */
-    private ?string $url;
+    private $url;
 
     public function __construct($data) {
         $this->key = $data['key'];
@@ -70,7 +70,7 @@ class Application
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getKey()
     {
         return $this->key;
     }
@@ -78,7 +78,7 @@ class Application
     /**
      * @return string
      */
-    public function getLogo(): string
+    public function getLogo()
     {
         return $this->logo;
     }
@@ -86,7 +86,7 @@ class Application
     /**
      * @return array
      */
-    public function getBalances(): array
+    public function getBalances()
     {
         return $this->balances;
     }
@@ -94,7 +94,7 @@ class Application
     /**
      * @return array
      */
-    public function getCountries(): array
+    public function getCountries()
     {
         return $this->countries;
     }
@@ -102,7 +102,7 @@ class Application
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription()
     {
         return $this->description;
     }
@@ -110,7 +110,7 @@ class Application
     /**
      * @return bool
      */
-    public function isLive(): bool
+    public function isLive()
     {
         return $this->isLive;
     }
@@ -118,7 +118,7 @@ class Application
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -126,7 +126,7 @@ class Application
     /**
      * @return array
      */
-    public function getSecurity(): array
+    public function getSecurity()
     {
         return $this->security;
     }
@@ -134,7 +134,7 @@ class Application
     /**
      * @return string
      */
-    public function getStatus(): string
+    public function getStatus()
     {
         return $this->status;
     }
@@ -142,7 +142,7 @@ class Application
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url;
     }
@@ -153,8 +153,8 @@ class Application
      * @param string $field
      * @return mixed
      */
-    public function getSecurityField(string $field): mixed {
-        return $this->security[$field] ?? null;
+    public function getSecurityField(string $field) {
+        return isset($this->security[$field]) ? $this->security[$field] : null;
     }
 
     /**

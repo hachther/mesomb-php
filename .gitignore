@@ -3,3 +3,4 @@ vendor
 .idea
 .phpdoc
 phpdoc-markdown
+composer.lock

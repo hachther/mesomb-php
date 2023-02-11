@@ -1,10 +1,13 @@
 {
-    "version": "1.2",
-    "name": "hachther/phpmesomb",
-    "description": "Php client for MeSomb services",
+    "version": "2.0",
+    "name": "hachther/mesomb-php",
+    "description": "MeSomb PHP Library",
+    "keywords": ["mesomb", "payment processing", "api", "mobile money", "orange money"],
     "type": "library",
     "require": {
-        "guzzlehttp/guzzle": "^7.5"
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
     },
     "license": "MIT",
     "autoload": {
@@ -14,7 +17,7 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/PaymentTest.php"
+            "tests/MeSomb/Operation/PaymentOperationTest.php"
         ]
     },
     "authors": [
@@ -30,7 +33,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/hachther/phpmesomb.git"
+            "url": "https://github.com/hachther/mesomb-php.git"
         }
     ]
 }

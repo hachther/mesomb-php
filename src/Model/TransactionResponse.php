@@ -4,12 +4,23 @@ namespace MeSomb\Model;
 
 class TransactionResponse
 {
-    private bool $success;
-    private ?string $message;
-    private ?string $redirect;
-    private array $data;
-    private ?string $reference;
-    private string $status;
+    /** @var bool|mixed */
+    private $success;
+
+    /** @var string|mixed|null  */
+    private $message;
+
+    /** @var string|mixed|null  */
+    private $redirect;
+
+    /** @var array|mixed */
+    private $data;
+
+    /** @var string|mixed|null  */
+    private $reference;
+
+    /** @var string|mixed  */
+    private $status;
 
     public function __construct($data)
     {
@@ -33,7 +44,7 @@ class TransactionResponse
     /**
      * @return bool|mixed
      */
-    public function getSuccess(): mixed
+    public function getSuccess()
     {
         return $this->success;
     }
@@ -41,7 +52,7 @@ class TransactionResponse
     /**
      * @return mixed|string
      */
-    public function getMessage(): mixed
+    public function getMessage()
     {
         return $this->message;
     }
@@ -49,7 +60,7 @@ class TransactionResponse
     /**
      * @return mixed|string
      */
-    public function getRedirect(): mixed
+    public function getRedirect()
     {
         return $this->redirect;
     }
@@ -57,7 +68,7 @@ class TransactionResponse
     /**
      * @return array|mixed
      */
-    public function getData(): mixed
+    public function getData()
     {
         return $this->data;
     }
@@ -65,7 +76,7 @@ class TransactionResponse
     /**
      * @return mixed|string
      */
-    public function getReference(): mixed
+    public function getReference()
     {
         return $this->reference;
     }
@@ -73,7 +84,7 @@ class TransactionResponse
     /**
      * @return mixed|string
      */
-    public function getStatus(): mixed
+    public function getStatus()
     {
         return $this->status;
     }

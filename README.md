@@ -16,30 +16,43 @@
 > 
 > You can check the full [documentation of the api here](https://mesomb.hachther.com/en/api/v1.1/schema/)
 
-### 🏠 [Homepage](https://mesomb.com)
+## 🏠 Requirements
 
-## Install
+PHP 5.6.0 and later.
+
+## Composer
+
+You can install the bindings via [Composer](http://getcomposer.org/). Run the following command:
 
 ```sh
-composer require hachther/mesomb
+composer require hachther/mesomb-php
 ```
 
-## Documentation for endpoints
+To use the bindings, use Composer's [autoload](https://getcomposer.org/doc/01-basic-usage.md#autoloading):
 
-### Payment
+```php
+require_once 'vendor/autoload.php';
+```
 
-All API related to the payment service available in ```MeSomb\Operation\PaymentOperation```
+## Manual Installation
 
-| Method                                                            | Endpoint              | Description                                        |
-|-------------------------------------------------------------------|-----------------------|----------------------------------------------------|
-| [makeCollect](docs/README.md#PaymentOperationmakeCollect)         | payment/collect/      | Collect money from a mobile account                |
-| [makeDeposit](docs/README.md#PaymentOperationmakeDeposit)         | payment/deposit/      | Make a deposit in a receiver mobile account        |
-| [updateSecurity](docs/README.md#PaymentOperationupdateSecurity)   | payment/security/     | Update security settings of your service on MeSomb |
-| [getStatus](docs/README.md#PaymentOperationgetStatus)             | payment/status/       | Get the current status of your service on MeSomb   |
-| [getTransactions](docs/README.md#PaymentOperationgetTransactions) | payment/transactions/ | Get transactions from MeSomb by IDs.               |
+If you do not wish to use Composer, you can download the latest release. Then, to use the bindings, include the init.php file.
 
+```php
+require_once '/path/to/mesomb-php/init.php';
+```
 
-## Usage
+## Dependencies
+
+The bindings require the following extensions in order to work properly:
+
+- [curl](https://secure.php.net/manual/en/book.curl.php), although you can use your own non-cURL client if you prefer
+- [json](https://secure.php.net/manual/en/book.json.php)
+- [mbstring](https://secure.php.net/manual/en/book.mbstring.php) (Multibyte String)
+
+If you use Composer, these dependencies should be handled automatically. If you install manually, you'll want to make sure that these extensions are available.
+
+## Getting Stated
 
 ### Collect money from an account
 
@@ -87,6 +100,20 @@ $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>')
 $transactions = $client->getTransactions(['ID1', 'ID2']);
 print_r($transactions);
 ```
+
+## Documentation
+
+### Payment
+
+All API related to the payment service available in ```MeSomb\Operation\PaymentOperation```
+
+| Method                                                            | Endpoint              | Description                                        |
+|-------------------------------------------------------------------|-----------------------|----------------------------------------------------|
+| [makeCollect](docs/README.md#PaymentOperationmakeCollect)         | payment/collect/      | Collect money from a mobile account                |
+| [makeDeposit](docs/README.md#PaymentOperationmakeDeposit)         | payment/deposit/      | Make a deposit in a receiver mobile account        |
+| [updateSecurity](docs/README.md#PaymentOperationupdateSecurity)   | payment/security/     | Update security settings of your service on MeSomb |
+| [getStatus](docs/README.md#PaymentOperationgetStatus)             | payment/status/       | Get the current status of your service on MeSomb   |
+| [getTransactions](docs/README.md#PaymentOperationgetTransactions) | payment/transactions/ | Get transactions from MeSomb by IDs.               |
 
 ## Author
 

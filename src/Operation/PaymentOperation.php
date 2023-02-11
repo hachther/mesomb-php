@@ -3,17 +3,14 @@
 namespace MeSomb\Operation;
 
 use DateTime;
-use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use MeSomb\Exception\InvalidClientRequestException;
 use MeSomb\Exception\PermissionDeniedException;
 use MeSomb\Exception\ServerException;
 use MeSomb\Exception\ServiceNotFoundException;
+use MeSomb\HttpClient\CurlClient;
+use MeSomb\MeSomb;
 use MeSomb\Model\Application;
 use MeSomb\Model\TransactionResponse;
-use MeSomb\Settings;
 use MeSomb\Signature;
 
 /**
@@ -28,23 +25,28 @@ class PaymentOperation
      *
      * @var string $applicationKey
      */
-    private string $applicationKey;
+    private $applicationKey;
 
     /**
      * Your access key provided by MeSomb
      *
      * @var string $accessKey
      */
-    private string $accessKey;
+    private $accessKey;
 
     /**
      * Your secret key provided by MeSomb
      *
      * @var string $secretKey
      */
-    private string $secretKey;
+    private $secretKey;
 
-    public function __construct(string $applicationKey, string $accessKey, string $secretKey)
+    /**
+     * @param string $applicationKey
+     * @param string $accessKey
+     * @param string $secretKey
+     */
+    public function __construct($applicationKey, $accessKey, $secretKey)
     {
         $this->applicationKey = $applicationKey;
         $this->accessKey = $accessKey;
@@ -52,12 +54,21 @@ class PaymentOperation
     }
 
     private function buildUrl($endpoint) {
-        $host = Settings::$HOST;
-        $apiVersion = Settings::$APIVERSION;
+        $host = MeSomb::$apiBase;
+        $apiVersion = MeSomb::$apiVersion;
         return "$host/en/api/$apiVersion/$endpoint";
     }
 
-    private function getAuthorization($method, $endpoint, $date, $nonce, array $headers = [], array $body = null): string
+    /**
+     * @param $method
+     * @param $endpoint
+     * @param $date
+     * @param $nonce
+     * @param array $headers
+     * @param array|null $body
+     * @return string
+     */
+    private function getAuthorization($method, $endpoint, $date, $nonce, array $headers = [], array $body = null)
     {
         $url = $this->buildUrl($endpoint);
 
@@ -67,25 +78,32 @@ class PaymentOperation
     }
 
     /**
-     * @throws ServerException
+     * @param int $statusCode HTTP Error code
+     * @param string $response text body content for curl reponse
      * @throws InvalidClientRequestException
+     * @throws ServerException
      * @throws ServiceNotFoundException
      * @throws PermissionDeniedException
      */
-    private function processClientException(ClientException $exception) {
+    private function processClientException($statusCode, $response) {
         $code = null;
-        $message = $exception->getResponse()->getBody()->getContents();
-        if (str_starts_with($message, "{")) {
-            $data = json_decode($message, true);
+        $message = $response;
+        if (strpos($response, "{") == 0) {
+            $data = json_decode($response, true);
             $message = $data['detail'];
             $code = $data['code'];
         }
-        throw match ($exception->getCode()) {
-            404 => new ServiceNotFoundException($message),
-            403, 401 => new PermissionDeniedException($message),
-            400 => new InvalidClientRequestException($message, $code),
-            default => new ServerException($message, $code),
-        };
+        switch ($statusCode) {
+            case 404:
+                throw new ServiceNotFoundException($message);
+            case 403:
+            case 401:
+                throw new PermissionDeniedException($message);
+            case 400:
+                throw new InvalidClientRequestException($message, $code);
+            default:
+                throw new ServerException($message, $code);
+        }
     }
 
     /**
@@ -97,40 +115,54 @@ class PaymentOperation
      * @param DateTime $date date of the request
      * @param string $nonce unique string on each request
      * @param string|null $trxID unique string in your local system
-     * @param string $country country CM, NE
-     * @param string $currency code of the currency of the amount
-     * @param bool $feesIncluded if you want MeSomb to deduct he fees in the collected amount
-     * @param string $mode asynchronous or synchronous
-     * @param bool $conversion In case of foreign currently defined if you want to rely on MeSomb to convert the amount in the local currency
+     * @param string|null $country country CM, NE
+     * @param string|null $currency code of the currency of the amount
+     * @param bool|null $feesIncluded if you want MeSomb to deduct he fees in the collected amount
+     * @param string|null $mode asynchronous or synchronous
+     * @param bool|null $conversion In case of foreign currently defined if you want to rely on MeSomb to convert the amount in the local currency
      * @param array<string, string>|null $location array-key containing the location of the customer ({town: string, region: string, country: string}) check the documentation.
      * @param array<string, string>|null $customer array-key containing information of the customer ({email: string, phone: string, town: string, region: string, country: string, first_name: string, last_name: string, address: string}) check the documentation
      * @param array<array<string, string>>|null $products array of product contained in the transaction. Product in this format array{id: string, name: string, category: ?string, quantity: int, amount: float}
      * @param array|null $extra Extra parameter to send in the body check the API documentation
      *
-     * @return TransactionResponse|void
-     * @throws GuzzleException
+     * @return TransactionResponse
      * @throws InvalidClientRequestException
-     * @throws PermissionDeniedException
      * @throws ServerException
      * @throws ServiceNotFoundException
      */
     public function makeCollect(
-        int $amount,
-        string $service,
-        string $payer,
+        $amount,
+        $service,
+        $payer,
         DateTime $date,
-        string $nonce,
-        string $trxID = null,
-        string $country = 'CM',
-        string $currency = 'XAF',
-        bool $feesIncluded = true,
-        string $mode = 'synchronous',
-        bool $conversion = false,
+        $nonce,
+        $trxID = null,
+        $country = null,
+        $currency = null,
+        $feesIncluded = null,
+        $mode = null,
+        $conversion = null,
         array $location = null,
         array $customer = null,
         array $products = null,
         array $extra = null
     ) {
+        if (is_null($country)) {
+            $country = 'CM';
+        }
+        if (is_null($currency)) {
+            $currency = 'XAF';
+        }
+        if (is_null($feesIncluded)) {
+            $feesIncluded = true;
+        }
+        if (is_null($mode)) {
+            $mode = 'synchronous';
+        }
+        if (is_null($conversion)) {
+            $conversion = false;
+        }
+
         $endpoint = 'payment/collect/';
         $url = $this->buildUrl($endpoint);
 
@@ -159,29 +191,23 @@ class PaymentOperation
         $authorization = $this->getAuthorization('POST', $endpoint, $date, $nonce, ['content-type' => 'application/json'], $body);
 
         $headers = [
-            'x-mesomb-date' => $date->getTimestamp(),
-            'x-mesomb-nonce' => $nonce,
-            'Authorization' => $authorization,
-            'Content-Type'     => 'application/json',
-            'X-MeSomb-Application' => $this->applicationKey,
-            'X-MeSomb-OperationMode' => $mode,
+            "x-mesomb-date: ".$date->getTimestamp(),
+            'x-mesomb-nonce: '.$nonce,
+            'Authorization: '.$authorization,
+            'Content-Type: application/json',
+            'X-MeSomb-Application: '.$this->applicationKey,
+            'X-MeSomb-OperationMode: '.$mode,
         ];
         if (!is_null($trxID)) {
-            $headers['X-MeSomb-TrxID'] = $trxID;
+            $headers[] = 'X-MeSomb-TrxID: '.$trxID;
         }
 
-        $client = new Client();
-        try {
-            $response = $client->post($url, [
-                'body' => json_encode($body, JSON_UNESCAPED_SLASHES),
-                'headers' => $headers
-            ]);
-            return new TransactionResponse(json_decode($response->getBody()->getContents(), true));
-        } catch (ClientException $exception) {
-            $this->processClientException($exception);
-        } catch (Exception $exception) {
-            throw new ServerException($exception->getMessage(), $exception->getCode());
+        $client = new CurlClient();
+        list($rbody, $rcode, $rheaders) = $client->request('post', $url, $headers, $body);
+        if ($rcode >= 300) {
+            $this->processClientException($rcode, $rbody);
         }
+        return new TransactionResponse(json_decode($rbody, true));
     }
 
     /**
@@ -193,17 +219,22 @@ class PaymentOperation
      * @param DateTime $date date of the request
      * @param string $nonce Unique key generated for each transaction
      * @param string|null $trxID ID of the transaction in your local system
-     * @param string $country country code 'CM' by default
-     * @param string $currency currency of the transaction (XAF, XOF, ...) XAF by default
+     * @param string|null $country country code 'CM' by default
+     * @param string|null $currency currency of the transaction (XAF, XOF, ...) XAF by default
      * @param array|null $extra Extra parameter to send in the body check the API documentation
-     * @return TransactionResponse|void
-     * @throws GuzzleException
+     * @return TransactionResponse
      * @throws InvalidClientRequestException
-     * @throws PermissionDeniedException
      * @throws ServerException
      * @throws ServiceNotFoundException
      */
-    public function makeDeposit(int $amount, string $service, string $receiver, DateTime $date, string $nonce, string $trxID = null, string $country = 'CM', string $currency = 'XAF', array $extra = null) {
+    public function makeDeposit($amount, $service, $receiver, DateTime $date, $nonce, $trxID = null, $country = null, $currency = null, array $extra = null) {
+        if (is_null($country)) {
+            $country = 'CM';
+        }
+        if (is_null($currency)) {
+            $currency = 'XAF';
+        }
+
         $endpoint = 'payment/deposit/';
         $url = $this->buildUrl($endpoint);
 
@@ -222,28 +253,22 @@ class PaymentOperation
         $authorization = $this->getAuthorization('POST', $endpoint, $date, $nonce, ['content-type' => 'application/json'], $body);
 
         $headers = [
-            'x-mesomb-date' => $date->getTimestamp(),
-            'x-mesomb-nonce' => $nonce,
-            'Authorization' => $authorization,
-            'Content-Type'     => 'application/json',
-            'X-MeSomb-Application' => $this->applicationKey,
+            'x-mesomb-date: '.$date->getTimestamp(),
+            'x-mesomb-nonce: '.$nonce,
+            'Authorization: '.$authorization,
+            'Content-Type: '.'application/json',
+            'X-MeSomb-Application: '.$this->applicationKey,
         ];
         if (!is_null($trxID)) {
-            $headers['X-MeSomb-TrxID'] = $trxID;
+            $headers[] = 'X-MeSomb-TrxID: '.$trxID;
         }
 
-        $client = new Client();
-        try {
-            $response = $client->post($url, [
-                'body' => json_encode($body, JSON_UNESCAPED_SLASHES),
-                'headers' => $headers
-            ]);
-            return new TransactionResponse(json_decode($response->getBody()->getContents(), true));
-        } catch (ClientException $exception) {
-            $this->processClientException($exception);
-        } catch (Exception $exception) {
-            throw new ServerException($exception->getMessage(), $exception->getCode());
+        $client = new CurlClient();
+        list($rbody, $rcode, $rheaders) = $client->request('post', $url, $headers, $body);
+        if ($rcode >= 300) {
+            $this->processClientException($rcode, $rbody);
         }
+        return new TransactionResponse(json_decode($rbody, true));
     }
 
     /**
@@ -253,14 +278,12 @@ class PaymentOperation
      * @param string $action SET or UNSET
      * @param mixed|null $value value of the field
      * @param DateTime|null $date date of the request
-     * @return Application|void
+     * @return Application
      * @throws InvalidClientRequestException
-     * @throws PermissionDeniedException
      * @throws ServerException
      * @throws ServiceNotFoundException
-     * @throws GuzzleException
      */
-    public function updateSecurity(string $field, string $action, mixed $value = null, DateTime $date = null)
+    public function updateSecurity($field, $action, $value = null, DateTime $date = null)
     {
         $endpoint = 'payment/security/';
         $url = $this->buildUrl($endpoint);
@@ -279,35 +302,27 @@ class PaymentOperation
 
         $authorization = $this->getAuthorization('POST', $endpoint, $date, '', ['content-type' => 'application/json'], $body);
 
-        $client = new Client();
-
-        try {
-            $response = $client->post($url, [
-                'body' => json_encode($body, JSON_UNESCAPED_SLASHES),
-                'headers' => [
-                    'x-mesomb-date' => $date->getTimestamp(),
-                    'x-mesomb-nonce' => '',
-                    'Authorization' => $authorization,
-                    'Content-Type'     => 'application/json',
-                    'X-MeSomb-Application' => $this->applicationKey,
-                ]
-            ]);
-            return new Application(json_decode($response->getBody()->getContents(), true));
-        } catch (ClientException $exception) {
-            $this->processClientException($exception);
-        } catch (Exception $exception) {
-            throw new ServerException($exception->getMessage(), $exception->getCode());
+        $client = new CurlClient();
+        list($rbody, $rcode, $rheaders) = $client->request('post', $url, [
+            'x-mesomb-date: '.$date->getTimestamp(),
+            'x-mesomb-nonce: ',
+            'Authorization: '.$authorization,
+            'Content-Type: application/json',
+            'X-MeSomb-Application:'.$this->applicationKey,
+        ], $body);
+        if ($rcode >= 300) {
+            $this->processClientException($rcode, $rbody);
         }
+
+        return new Application(json_decode($rbody, true));
     }
 
     /**
      * Get the current status of your service on MeSomb
      *
      * @param DateTime|null $date date of the request
-     * @return Application|void
-     * @throws GuzzleException
+     * @return Application
      * @throws InvalidClientRequestException
-     * @throws PermissionDeniedException
      * @throws ServerException
      * @throws ServiceNotFoundException
      */
@@ -321,23 +336,19 @@ class PaymentOperation
 
         $authorization = $this->getAuthorization('GET', $endpoint, $date, '');
 
-        $client = new Client();
+        $client = new CurlClient();
+        list($rbody, $rcode, $rheaders) = $client->request('get', $this->buildUrl($endpoint), [
+            'x-mesomb-date: '.$date->getTimestamp(),
+            'x-mesomb-nonce: ',
+            'Authorization: '.$authorization,
+            'X-MeSomb-Application:'.$this->applicationKey,
+        ], null);
 
-        try {
-            $response = $client->get($this->buildUrl($endpoint), [
-                'headers' => [
-                    'x-mesomb-date' => $date->getTimestamp(),
-                    'x-mesomb-nonce' => '',
-                    'Authorization' => $authorization,
-                    'X-MeSomb-Application' => $this->applicationKey,
-                ]
-            ]);
-            return new Application(json_decode($response->getBody()->getContents(), true));
-        } catch (ClientException $exception) {
-            $this->processClientException($exception);
-        } catch (Exception $exception) {
-            throw new ServerException($exception->getMessage(), $exception->getCode());
+        if ($rcode >= 300) {
+            $this->processClientException($rcode, $rbody);
         }
+
+        return new Application(json_decode($rbody, true));
     }
 
     /**
@@ -346,7 +357,6 @@ class PaymentOperation
      * @param array $ids list of ids
      * @param DateTime|null $date date of the request
      * @return mixed|void
-     * @throws GuzzleException
      * @throws InvalidClientRequestException
      * @throws PermissionDeniedException
      * @throws ServerException
@@ -362,22 +372,18 @@ class PaymentOperation
 
         $authorization = $this->getAuthorization('GET', $endpoint, $date, '');
 
-        $client = new Client();
+        $client = new CurlClient();
+        list($rbody, $rcode, $rheaders) = $client->request('get', $this->buildUrl($endpoint), [
+            'x-mesomb-date: '.$date->getTimestamp(),
+            'x-mesomb-nonce: ',
+            'Authorization: '.$authorization,
+            'X-MeSomb-Application:'.$this->applicationKey,
+        ], null);
 
-        try {
-            $response = $client->get($this->buildUrl($endpoint), [
-                'headers' => [
-                    'x-mesomb-date' => $date->getTimestamp(),
-                    'x-mesomb-nonce' => '',
-                    'Authorization' => $authorization,
-                    'X-MeSomb-Application' => $this->applicationKey,
-                ]
-            ]);
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (ClientException $exception) {
-            $this->processClientException($exception);
-        } catch (Exception $exception) {
-            throw new ServerException($exception->getMessage(), $exception->getCode());
+        if ($rcode >= 300) {
+            $this->processClientException($rcode, $rbody);
         }
+
+        return json_decode($rbody, true);
     }
 }
