@@ -59,10 +59,10 @@ If you use Composer, these dependencies should be handled automatically. If you 
 ```PHP
 <?php
 use MeSomb\Operation\PaymentOperation;
-use MeSomb\Signature;
+use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
-$client->makeCollect(100, 'MTN', '670000000', new DateTime(), Signature::nonceGenerator());
+$client->makeCollect(100, 'MTN', '670000000', new DateTime(), RandomGenerator::nonce());
 ```
 
 ### Depose money in an account
@@ -70,10 +70,10 @@ $client->makeCollect(100, 'MTN', '670000000', new DateTime(), Signature::nonceGe
 ```PHP
 <?php
 use MeSomb\Operation\PaymentOperation;
-use MeSomb\Signature;
+use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
-$client->makeDeposit(100, 'MTN', '670000000', new DateTime(), Signature::nonceGenerator());
+$client->makeDeposit(100, 'MTN', '670000000', new DateTime(), RandomGenerator::nonce());
 ```
 
 ### Get application status
@@ -81,7 +81,7 @@ $client->makeDeposit(100, 'MTN', '670000000', new DateTime(), Signature::nonceGe
 ```PHP
 <?php
 use MeSomb\Operation\PaymentOperation;
-use MeSomb\Signature;
+use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
 $application = $client->getStatus();
@@ -94,7 +94,7 @@ print_r($application->getBalance());
 ```PHP
 <?php
 use MeSomb\Operation\PaymentOperation;
-use MeSomb\Signature;
+use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
 $transactions = $client->getTransactions(['ID1', 'ID2']);
