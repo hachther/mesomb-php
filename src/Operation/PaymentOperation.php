@@ -120,6 +120,9 @@ class PaymentOperation
             $headers[] = 'X-MeSomb-TrxID: '.$body['trxID'];
             unset($body['trxID']);
         }
+        if ($body) {
+            $body['source'] = 'MeSombPHP/v'.MeSomb::$version;
+        }
         if ($method == 'POST') {
             $authorization = $this->getAuthorization($method, $endpoint, $date, $nonce, ['content-type' => 'application/json'], $body);
         } else {
