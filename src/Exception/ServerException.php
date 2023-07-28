@@ -3,7 +3,6 @@
 namespace MeSomb\Exception;
 
 use Exception;
-use Throwable;
 
 class ServerException extends Exception
 {
@@ -12,12 +11,12 @@ class ServerException extends Exception
     /**
      * @param string $message [optional] The Exception message to throw.
      * @param int $code [optional] The Exception code.
-     * @param null|Throwable $previous [optional] The previous throwable used for the exception chaining.
+     * @param null $previous [optional] The previous throwable used for the exception chaining.
      */
-    public function __construct($message, $code, $previous = null)
+    public function __construct($message, $code = 0, $previous = null)
     {
         $this->code = $code;
 
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $code, $previous);
     }
 }

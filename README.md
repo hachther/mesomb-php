@@ -62,7 +62,13 @@ use MeSomb\Operation\PaymentOperation;
 use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
-$client->makeCollect(100, 'MTN', '670000000', new DateTime(), RandomGenerator::nonce());
+$payment->makeCollect([
+    'amount' => 100,
+    'service' => 'MTN',
+    'payer' => '670000000',
+    'nonce' => RandomGenerator::nonce(),
+    'trxID' => '1'
+]);
 ```
 
 ### Depose money in an account
@@ -73,7 +79,13 @@ use MeSomb\Operation\PaymentOperation;
 use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
-$client->makeDeposit(100, 'MTN', '670000000', new DateTime(), RandomGenerator::nonce());
+$payment->makeDeposit([
+    'amount' => 100,
+    'service' => 'MTN',
+    'receiver' => '670000000',
+    'nonce' => RandomGenerator::nonce(),
+    'trxID' => '1'
+]);
 ```
 
 ### Get application status

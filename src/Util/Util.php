@@ -229,4 +229,8 @@ abstract class Util
     {
         return (int) \round(\microtime(true) * 1000);
     }
+
+    public static function getOrDefault($arr, $key, $default = null) {
+        return isset($arr[$key]) ? $arr[$key] : $default;
+    }
 }
