@@ -17,7 +17,7 @@ class PaymentOperationTest extends TestCase
 
     protected function setUp(): void
     {
-        MeSomb::$apiBase = 'http://192.168.8.103:8000';
+        MeSomb::$apiBase = 'http://192.168.8.105:8000';
     }
 
     public function testMakeCollectWithNotFoundService()
@@ -189,6 +189,7 @@ class PaymentOperationTest extends TestCase
         $this->assertTrue($response->isTransactionSuccess());
         $this->assertEquals('SUCCESS', $response->status);
         $this->assertEquals(100, $response->transaction->amount);
+        $this->assertEquals(2, $response->transaction->fees);
         $this->assertEquals('237670000000', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);

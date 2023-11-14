@@ -142,6 +142,8 @@ class PaymentOperation
     /**
      * Collect money from a mobile account
      *
+     * @param array{foo: string, bar: int} $params
+     * @param string $params[amount] - Amount of the transaction
      * @param array-key $params with the below information
      *               - amount: amount to collect
      *               - service: payment service with the possible values MTN, ORANGE, AIRTEL
