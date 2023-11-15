@@ -1,5 +1,5 @@
 {
-    "version": "2.1",
+    "version": "2.1.1",
     "name": "hachther/mesomb-php",
     "description": "MeSomb PHP Library",
     "keywords": ["mesomb", "payment processing", "api", "mobile money", "orange money"],
