@@ -62,7 +62,7 @@ use MeSomb\Operation\PaymentOperation;
 use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
-$payment->makeCollect([
+$client->makeCollect([
     'amount' => 100,
     'service' => 'MTN',
     'payer' => '670000000',
@@ -79,7 +79,7 @@ use MeSomb\Operation\PaymentOperation;
 use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
-$payment->makeDeposit([
+$client->makeDeposit([
     'amount' => 100,
     'service' => 'MTN',
     'receiver' => '670000000',

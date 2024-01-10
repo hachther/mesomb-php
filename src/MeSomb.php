@@ -21,7 +21,7 @@ class MeSomb
 
     /** @var null|string The version of the MeSomb API to use for requests. */
     public static $apiVersion = 'v1.1';
-    public static $version = '2.1';
+    public static $version = '2.1.1';
 
     /** @var string Path to the CA bundle used to verify SSL certificates */
     public static $caBundlePath = null;
