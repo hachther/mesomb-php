@@ -573,7 +573,7 @@ class CurlClient
             $msg .= "\n\nRequest was retried {$numRetries} times.";
         }
 
-        throw new ServerException($msg);
+        throw new ServerException($msg, 0);
     }
 
     /**

@@ -13,10 +13,10 @@ class ServerException extends Exception
      * @param int $code [optional] The Exception code.
      * @param null $previous [optional] The previous throwable used for the exception chaining.
      */
-    public function __construct($message, $code = 0, $previous = null)
+    public function __construct($message, $code, $previous = null)
     {
         $this->code = $code;
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, 0, $previous);
     }
 }
