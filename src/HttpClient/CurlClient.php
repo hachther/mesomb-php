@@ -260,9 +260,9 @@ class CurlClient
         $opts[CURLOPT_TIMEOUT] = $this->timeout;
         $opts[CURLOPT_HTTPHEADER] = $headers;
 //        $opts[CURLOPT_CAINFO] = MeSomb::getCABundlePath();
-//        if (!MeSomb::getVerifySslCerts()) {
-//            $opts[CURLOPT_SSL_VERIFYPEER] = false;
-//        }
+        if (!MeSomb::getVerifySslCerts()) {
+            $opts[CURLOPT_SSL_VERIFYPEER] = false;
+        }
 
         if (!isset($opts[CURLOPT_HTTP_VERSION]) && $this->getEnableHttp2()) {
             // For HTTPS requests, enable HTTP/2, if supported
@@ -573,7 +573,7 @@ class CurlClient
             $msg .= "\n\nRequest was retried {$numRetries} times.";
         }
 
-        throw new ServerException($msg);
+        throw new ServerException($msg, 0);
     }
 
     /**

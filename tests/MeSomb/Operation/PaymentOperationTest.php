@@ -17,7 +17,8 @@ class PaymentOperationTest extends TestCase
 
     protected function setUp(): void
     {
-        MeSomb::$apiBase = 'http://192.168.8.105:8000';
+        MeSomb::$apiBase = 'http://192.168.100.10:8000';
+        MeSomb::setVerifySslCerts(false);
     }
 
     public function testMakeCollectWithNotFoundService()
@@ -76,12 +77,26 @@ class PaymentOperationTest extends TestCase
         $this->assertTrue($response->isOperationSuccess());
         $this->assertTrue($response->isTransactionSuccess());
         $this->assertEquals('SUCCESS', $response->status);
-        $this->assertEquals(97, $response->transaction->amount);
-        $this->assertEquals(3, $response->transaction->fees);
+        $this->assertEquals(98, $response->transaction->amount);
+        $this->assertEquals(2, $response->transaction->fees);
         $this->assertEquals('237670000000', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);
         $this->assertEquals('1', $response->transaction->reference);
+
+        $response = $payment->makeCollect([
+            'amount' => 1100,
+            'conversion' => false,
+            'country' => 'CM',
+            'currency' => 'XAF',
+            'fees' => true,
+            'service' => 'MTN',
+            'payer' => '653757515',
+            'nonce' => RandomGenerator::nonce(),
+            'trxID' => '1'
+        ]);
+        $this->assertTrue($response->isOperationSuccess());
+        $this->assertTrue($response->isTransactionSuccess());
     }
 
     public function testMakeCollectPending()
