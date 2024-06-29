@@ -23,7 +23,7 @@ class PaymentOperationTest extends TestCase
 
     public function testMakeCollectWithNotFoundService()
     {
-        $payment = new PaymentOperation($this->applicationKey . "f", $this->accessKey, $this->secretKey);
+        $payment = new PaymentOperation($this->applicationKey."f", $this->accessKey, $this->secretKey);
         $nonce = 'lkakdio90fsd8fsf';
 
         $this->expectException(ServiceNotFoundException::class);
@@ -70,7 +70,7 @@ class PaymentOperationTest extends TestCase
         $response = $payment->makeCollect([
             'amount' => 100,
             'service' => 'MTN',
-            'payer' => '670000000',
+            'payer' => '677550203',
             'nonce' => RandomGenerator::nonce(),
             'trxID' => '1'
         ]);
@@ -79,7 +79,7 @@ class PaymentOperationTest extends TestCase
         $this->assertEquals('SUCCESS', $response->status);
         $this->assertEquals(98, $response->transaction->amount);
         $this->assertEquals(2, $response->transaction->fees);
-        $this->assertEquals('237670000000', $response->transaction->b_party);
+        $this->assertEquals('237677550203', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);
         $this->assertEquals('1', $response->transaction->reference);
@@ -146,8 +146,8 @@ class PaymentOperationTest extends TestCase
         $this->assertTrue($response->isOperationSuccess());
         $this->assertTrue($response->isTransactionSuccess());
         $this->assertEquals('SUCCESS', $response->status);
-        $this->assertEquals(97, $response->transaction->amount);
-        $this->assertEquals(3, $response->transaction->fees);
+        $this->assertEquals(98, $response->transaction->amount);
+        $this->assertEquals(2, $response->transaction->fees);
         $this->assertEquals('237670000000', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);

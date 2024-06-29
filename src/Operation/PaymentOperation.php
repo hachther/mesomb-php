@@ -58,7 +58,7 @@ class PaymentOperation
     private function buildUrl($endpoint) {
         $host = MeSomb::$apiBase;
         $apiVersion = MeSomb::$apiVersion;
-        return "$host/en/api/$apiVersion/$endpoint";
+        return "$host/api/$apiVersion/$endpoint";
     }
 
     /**
@@ -115,6 +115,7 @@ class PaymentOperation
             'Content-Type: application/json',
             'X-MeSomb-Application: '.$this->applicationKey,
             'X-MeSomb-OperationMode: '.$mode,
+            'Accept-Language: '.MeSomb::$language,
         ];
         if (!is_null(Util::getOrDefault($body, 'trxID'))) {
             $headers[] = 'X-MeSomb-TrxID: '.$body['trxID'];

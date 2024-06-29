@@ -2,6 +2,8 @@
 
 namespace MeSomb\Model;
 
+use MeSomb\Util\Util;
+
 class Application
 {
     /**
@@ -65,8 +67,8 @@ class Application
         $this->isLive = $data['is_live'];
         $this->name = $data['name'];
         $this->security = $data['security'];
-        $this->status = $data['status'];
-        $this->url = $data['url'];
+        $this->status = Util::getOrDefault($data, 'status');
+        $this->url = Util::getOrDefault($data, 'url');
     }
 
     /**

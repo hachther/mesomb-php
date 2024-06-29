@@ -2,6 +2,8 @@
 
 namespace MeSomb\Model;
 
+use MeSomb\Util\Util;
+
 class Customer
 {
     /**
@@ -45,13 +47,13 @@ class Customer
     public $address;
 
     public function __construct($data) {
-        $this->email = $data['email'];
-        $this->phone = $data['phone'];
-        $this->town = $data['town'];
-        $this->region = $data['region'];
-        $this->country = $data['country'];
-        $this->first_name = $data['first_name'];
-        $this->last_name = $data['last_name'];
-        $this->address = $data['address'];
+        $this->email = Util::getOrDefault($data, 'email');
+        $this->phone = Util::getOrDefault($data, 'phone');
+        $this->town = Util::getOrDefault($data, 'town');
+        $this->region = Util::getOrDefault($data, 'region');
+        $this->country = Util::getOrDefault($data, 'country');
+        $this->first_name = Util::getOrDefault($data, 'first_name');
+        $this->last_name = Util::getOrDefault($data, 'last_name');
+        $this->address = Util::getOrDefault($data, 'address');
     }
 }

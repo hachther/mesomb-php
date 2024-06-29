@@ -2,6 +2,8 @@
 
 namespace MeSomb\Model;
 
+use MeSomb\Util\Util;
+
 class Product
 {
     /**
@@ -26,9 +28,9 @@ class Product
 
     public function __construct($data)
     {
-        $this->name = $data['name'];
-        $this->category = $data['category'];
-        $this->quantity = isset($data['quantity']) ? $data['quantity'] : null;
-        $this->amount = isset($data['amount']) ? $data['amount'] : null;
+        $this->name = Util::getOrDefault($data, 'name');
+        $this->category = Util::getOrDefault($data, 'category');
+        $this->quantity = Util::getOrDefault($data, 'quantity');
+        $this->amount = Util::getOrDefault($data, 'amount');
     }
 }
