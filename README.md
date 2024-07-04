@@ -63,7 +63,7 @@ use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
 // MeSomb::setVerifySslCerts(false); if to want to disable ssl verification
-$payment->makeCollect([
+$client->makeCollect([
     'amount' => 100,
     'service' => 'MTN',
     'payer' => '670000000',
@@ -81,7 +81,7 @@ use MeSomb\Util\RandomGenerator;
 
 $client = new PaymentOperation('<applicationKey>', '<AccessKey>', '<SecretKey>');
 // MeSomb::setVerifySslCerts(false); if to want to disable ssl verification
-$payment->makeDeposit([
+$client->makeDeposit([
     'amount' => 100,
     'service' => 'MTN',
     'receiver' => '670000000',
