@@ -30,11 +30,6 @@ class Application
     public $description;
 
     /**
-     * @var bool if your app can receive live transaction
-     */
-    public $isLive;
-
-    /**
      * @var string the name of your service
      */
     public $name;
@@ -43,11 +38,6 @@ class Application
      * @var array security setting of your service at MeSomb
      */
     public $security;
-
-    /**
-     * @var string current status of your application
-     */
-    public $status;
 
     /**
      * @var string|null the url of your service
@@ -62,10 +52,8 @@ class Application
         }, $data['balances']);
         $this->countries = $data['countries'];
         $this->description = $data['description'];
-        $this->isLive = $data['is_live'];
         $this->name = $data['name'];
         $this->security = $data['security'];
-        $this->status = $data['status'];
         $this->url = $data['url'];
     }
 

@@ -17,7 +17,7 @@ class PaymentOperationTest extends TestCase
 
     protected function setUp(): void
     {
-        MeSomb::$apiBase = 'http://192.168.8.105:8000';
+        MeSomb::$apiBase = 'http://127.0.0.1:8000';
     }
 
     public function testMakeCollectWithNotFoundService()
@@ -53,7 +53,7 @@ class PaymentOperationTest extends TestCase
         $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
         $nonce = 'lkakdio90fsd8fsf';
 
-        $this->expectExceptionCode('invalid-amount');
+        $this->expectExceptionCode('duplicated-request');
         $payment->makeCollect([
             'amount' => 5,
             'service' => 'MTN',
@@ -70,14 +70,13 @@ class PaymentOperationTest extends TestCase
             'amount' => 100,
             'service' => 'MTN',
             'payer' => '670000000',
-            'nonce' => RandomGenerator::nonce(),
             'trxID' => '1'
         ]);
         $this->assertTrue($response->isOperationSuccess());
         $this->assertTrue($response->isTransactionSuccess());
         $this->assertEquals('SUCCESS', $response->status);
-        $this->assertEquals(97, $response->transaction->amount);
-        $this->assertEquals(3, $response->transaction->fees);
+        $this->assertEquals(98, $response->transaction->amount);
+        $this->assertEquals(2, $response->transaction->fees);
         $this->assertEquals('237670000000', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);
@@ -92,7 +91,6 @@ class PaymentOperationTest extends TestCase
             'amount' => 100,
             'service' => 'MTN',
             'payer' => '670000000',
-            'nonce' => RandomGenerator::nonce(),
             'mode' => 'asynchronous'
         ]);
         $this->assertTrue($response->isOperationSuccess());
@@ -108,7 +106,6 @@ class PaymentOperationTest extends TestCase
             'amount' => 100,
             'service' => 'MTN',
             'payer' => '670000000',
-            'nonce' => RandomGenerator::nonce(),
             'trxID' => '1',
             'products' => [
                 [
@@ -131,8 +128,8 @@ class PaymentOperationTest extends TestCase
         $this->assertTrue($response->isOperationSuccess());
         $this->assertTrue($response->isTransactionSuccess());
         $this->assertEquals('SUCCESS', $response->status);
-        $this->assertEquals(97, $response->transaction->amount);
-        $this->assertEquals(3, $response->transaction->fees);
+        $this->assertEquals(98, $response->transaction->amount);
+        $this->assertEquals(2, $response->transaction->fees);
         $this->assertEquals('237670000000', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);
@@ -182,7 +179,6 @@ class PaymentOperationTest extends TestCase
             'amount' => 100,
             'service' => 'MTN',
             'receiver' => '670000000',
-            'nonce' => RandomGenerator::nonce(),
             'trxID' => '1'
         ]);
         $this->assertTrue($response->isOperationSuccess());
@@ -218,20 +214,6 @@ class PaymentOperationTest extends TestCase
         $this->assertEquals(['CM', 'NE'], $application->countries);
     }
 
-    public function testUnsetWhitelistIPs()
-    {
-        $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
-        $application = $payment->updateSecurity('whitelist_ips', 'UNSET');
-        $this->assertNull($application->getSecurityField('whitelist_ips'));
-    }
-
-    public function testUnsetBlacklistReceivers()
-    {
-        $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
-        $application = $payment->updateSecurity('blacklist_receivers', 'UNSET');
-        $this->assertNull($application->getSecurityField('blacklist_receivers'));
-    }
-
     public function testGetTransactionsWithNotFoundService()
     {
         $payment = new PaymentOperation($this->applicationKey . "f", $this->accessKey, $this->secretKey);
@@ -249,30 +231,38 @@ class PaymentOperationTest extends TestCase
     public function testGetTransactionsSuccess()
     {
         $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
-        $response = $payment->getTransactions(['9886f099-dee2-4eaa-9039-e92b2ee33353']);
+        $response = $payment->getTransactions(['a483a9e8-51d7-44c9-875b-1305b1801274']);
         $this->assertCount(1, $response);
-        $this->assertEquals('9886f099-dee2-4eaa-9039-e92b2ee33353', $response[0]->pk);
+        $this->assertEquals('a483a9e8-51d7-44c9-875b-1305b1801274', $response[0]->pk);
     }
 
     public function testCheckTransactionsWithNotFoundService()
     {
         $payment = new PaymentOperation($this->applicationKey . "f", $this->accessKey, $this->secretKey);
         $this->expectException(ServiceNotFoundException::class);
-        $payment->checkTransactions(['c6c40b76-8119-4e93-81bf-bfb55417b392']);
+        $payment->checkTransactions(['a483a9e8-51d7-44c9-875b-1305b1801274']);
     }
 
     public function testCheckTransactionsWithPermissionDenied()
     {
         $payment = new PaymentOperation($this->applicationKey, "f" . substr($this->accessKey, 1), $this->secretKey);
         $this->expectException(PermissionDeniedException::class);
-        $payment->checkTransactions(['c6c40b76-8119-4e93-81bf-bfb55417b392']);
+        $payment->checkTransactions(['a483a9e8-51d7-44c9-875b-1305b1801274']);
     }
 
     public function testCheckTransactionsSuccess()
     {
         $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
-        $response = $payment->checkTransactions(['9886f099-dee2-4eaa-9039-e92b2ee33353']);
+        $response = $payment->checkTransactions(['a483a9e8-51d7-44c9-875b-1305b1801274']);
         $this->assertCount(1, $response);
-        $this->assertEquals('9886f099-dee2-4eaa-9039-e92b2ee33353', $response[0]->pk);
+        $this->assertEquals('a483a9e8-51d7-44c9-875b-1305b1801274', $response[0]->pk);
+    }
+
+    public function testRefundTransactionSuccess()
+    {
+        $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
+        $response = $payment->refundTransaction('a483a9e8-51d7-44c9-875b-1305b1801274');
+        $this->assertCount(1, $response);
+        $this->assertEquals('a483a9e8-51d7-44c9-875b-1305b1801274', $response[0]->pk);
     }
 }

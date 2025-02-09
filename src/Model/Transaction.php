@@ -117,4 +117,9 @@ class Transaction
             }, $data['products']);
         }
     }
+
+    public function isSuccess(): bool
+    {
+        return $this->status === 'SUCCESS';
+    }
 }

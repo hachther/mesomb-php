@@ -38,6 +38,6 @@ class TransactionResponse
     }
 
     public function isTransactionSuccess() {
-        return $this->success && $this->status == 'SUCCESS';
+        return $this->transaction && $this->transaction->isSuccess();
     }
 }
