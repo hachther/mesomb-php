@@ -197,7 +197,7 @@ abstract class Util
      */
     public static function urlEncode($key)
     {
-        $s = \urlencode((string) $key);
+        $s = \urlencode((string)$key);
 
         // Don't use strict form encoding by changing the square bracket control
         // characters back to their literals. This is fine by the server, and
@@ -227,10 +227,29 @@ abstract class Util
      */
     public static function currentTimeMillis()
     {
-        return (int) \round(\microtime(true) * 1000);
+        return (int)\round(\microtime(true) * 1000);
     }
 
-    public static function getOrDefault($arr, $key, $default = null) {
+    public static function getOrDefault($arr, $key, $default = null)
+    {
         return isset($arr[$key]) ? $arr[$key] : $default;
+    }
+
+    public static function detectOperator($phone, $country = 'CM')
+    {
+        $OPERATOR_REGEX = array(
+            'MTN' => '/^(237)?(67|65[0-4]|68[0-3])/',
+            'ORANGE' => '/^(237)?(69|65[5-9])/',
+            'NEXTTEL' => '/^(237)?(66)/',
+            'YOOMEE' => '/^(237)?(242)/',
+            'CAMTEL' => '/^(237)?(233|222|243|62)/',
+            'MESOMB' => '/^7/',
+        );
+        foreach ($OPERATOR_REGEX as $operator => $regex) {
+            if (preg_match($regex, $phone)) {
+                return $operator;
+            }
+        }
+        return null;
     }
 }
