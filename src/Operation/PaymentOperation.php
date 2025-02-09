@@ -79,6 +79,8 @@ class PaymentOperation extends AOperation
     public function makeCollect(array $params) {
         $endpoint = 'payment/collect/';
 
+        assert($params['amount'] > 0);
+
         $body = [
             'amount' => $params['amount'],
             'service' => $params['service'],
@@ -149,6 +151,8 @@ class PaymentOperation extends AOperation
      */
     public function makeDeposit(array $params) {
         $endpoint = 'payment/deposit/';
+
+        assert($params['amount'] > 0);
 
         $body = [
             'amount' => $params['amount'],
