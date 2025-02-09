@@ -2,6 +2,15 @@
 
 namespace MeSomb\Util;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use function array_change_key_case;
+use function count;
+use function is_string;
+use function strtolower;
+
 /**
  * CaseInsensitiveArray is an array-like class that ignores case for keys.
  *
@@ -12,37 +21,34 @@ namespace MeSomb\Util;
  * In the context of mesomb-php, this is useful because the API will return headers with different
  * case depending on whether HTTP/2 is used or not (with HTTP/2, headers are always in lowercase).
  */
-class CaseInsensitiveArray implements \ArrayAccess, \Countable, \IteratorAggregate
+class CaseInsensitiveArray implements ArrayAccess, Countable, IteratorAggregate
 {
-    private $container = [];
+    private $container;
 
     public function __construct($initial_array = [])
     {
-        $this->container = \array_change_key_case($initial_array, \CASE_LOWER);
+        $this->container = array_change_key_case($initial_array);
     }
 
     /**
      * @return int
      */
-    #[\ReturnTypeWillChange]
     public function count()
     {
-        return \count($this->container);
+        return count($this->container);
     }
 
     /**
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
-    #[\ReturnTypeWillChange]
     public function getIterator()
     {
-        return new \ArrayIterator($this->container);
+        return new ArrayIterator($this->container);
     }
 
     /**
      * @return void
      */
-    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $offset = static::maybeLowercase($offset);
@@ -56,7 +62,6 @@ class CaseInsensitiveArray implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $offset = static::maybeLowercase($offset);
@@ -67,7 +72,6 @@ class CaseInsensitiveArray implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * @return void
      */
-    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $offset = static::maybeLowercase($offset);
@@ -77,7 +81,6 @@ class CaseInsensitiveArray implements \ArrayAccess, \Countable, \IteratorAggrega
     /**
      * @return mixed
      */
-    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $offset = static::maybeLowercase($offset);
@@ -87,8 +90,8 @@ class CaseInsensitiveArray implements \ArrayAccess, \Countable, \IteratorAggrega
 
     private static function maybeLowercase($v)
     {
-        if (\is_string($v)) {
-            return \strtolower($v);
+        if (is_string($v)) {
+            return strtolower($v);
         }
 
         return $v;

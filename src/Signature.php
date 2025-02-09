@@ -7,7 +7,7 @@ use DateTime;
 class Signature
 {
     /**
-     * @param string $service service to use can be payment, wallet ... (the list is provide by MeSomb)
+     * @param string $service service to use can be payment, wallet ... (the list is provided by MeSomb)
      * @param string $method HTTP method (GET, POST, PUT, PATCH, DELETE...)
      * @param string $url the full url of the request with query element https://mesomb.hachther.com/path/to/ressource?highlight=params#url-parsing
      * @param DateTime $date Datetime of the request
@@ -55,7 +55,7 @@ class Signature
         $scope = $date->format("Ymd")."/".$service."/mesomb_request";
         $stringToSign = $algorithm."\n".$timestamp."\n".$scope."\n".sha1($canonicalRequest);
 
-        $signature = hash_hmac('sha1', $stringToSign, $credentials['secretKey'], false);
+        $signature = hash_hmac('sha1', $stringToSign, $credentials['secretKey']);
         $accessKey = $credentials['accessKey'];
 
         return "$algorithm Credential=$accessKey/$scope, SignedHeaders=$signedHeaders, Signature=$signature";

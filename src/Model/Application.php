@@ -4,6 +4,8 @@ namespace MeSomb\Model;
 
 class Application
 {
+    private $data;
+
     /**
      * @var string Application key
      */
@@ -45,6 +47,8 @@ class Application
     public $url;
 
     public function __construct($data) {
+        $this->data = $data;
+
         $this->key = $data['key'];
         $this->logo = $data['logo'];
         $this->balances = array_map(function ($v) {
@@ -63,7 +67,7 @@ class Application
      * @param string $field
      * @return mixed
      */
-    public function getSecurityField(string $field) {
+    public function getSecurityField($field) {
         return isset($this->security[$field]) ? $this->security[$field] : null;
     }
 
@@ -74,7 +78,7 @@ class Application
      * @param string|null $service
      * @return int
      */
-    public function getBalance(string $country = null, string $service = null)
+    public function getBalance($country = null, $service = null)
     {
         $data = $this->balances;
         if ($country != null) {
@@ -91,5 +95,10 @@ class Application
         return array_reduce($data, function ($acc, $item) {
             return $acc + $item->value;
         }, 0);
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 }

@@ -2,6 +2,26 @@
 
 namespace MeSomb\Util;
 
+use function array_keys;
+use function array_merge;
+use function array_push;
+use function count;
+use function function_exists;
+use function hash_equals;
+use function implode;
+use function is_array;
+use function is_string;
+use function mb_detect_encoding;
+use function microtime;
+use function ord;
+use function range;
+use function round;
+use function str_replace;
+use function strlen;
+use function trigger_error;
+use function urlencode;
+use const E_USER_WARNING;
+
 abstract class Util
 {
     private static $isMbstringAvailable = null;
@@ -18,13 +38,13 @@ abstract class Util
      */
     public static function isList($array)
     {
-        if (!\is_array($array)) {
+        if (!is_array($array)) {
             return false;
         }
         if ([] === $array) {
             return true;
         }
-        if (\array_keys($array) !== \range(0, \count($array) - 1)) {
+        if (array_keys($array) !== range(0, count($array) - 1)) {
             return false;
         }
 
@@ -40,17 +60,17 @@ abstract class Util
     public static function utf8($value)
     {
         if (null === self::$isMbstringAvailable) {
-            self::$isMbstringAvailable = \function_exists('mb_detect_encoding') && \function_exists('mb_convert_encoding');
+            self::$isMbstringAvailable = function_exists('mb_detect_encoding') && function_exists('mb_convert_encoding');
 
             if (!self::$isMbstringAvailable) {
-                \trigger_error('It looks like the mbstring extension is not enabled. ' .
+                trigger_error('It looks like the mbstring extension is not enabled. ' .
                     'UTF-8 strings will not properly be encoded. Ask your system ' .
                     'administrator to enable the mbstring extension, or write to ' .
-                    'support@mesomb.atlassian.net if you have any questions.', \E_USER_WARNING);
+                    'support@mesomb.atlassian.net if you have any questions.', E_USER_WARNING);
             }
         }
 
-        if (\is_string($value) && self::$isMbstringAvailable && 'UTF-8' !== \mb_detect_encoding($value, 'UTF-8', true)) {
+        if (is_string($value) && self::$isMbstringAvailable && 'UTF-8' !== mb_detect_encoding($value, 'UTF-8', true)) {
             return mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
         }
 
@@ -69,19 +89,19 @@ abstract class Util
     public static function secureCompare($a, $b)
     {
         if (null === self::$isHashEqualsAvailable) {
-            self::$isHashEqualsAvailable = \function_exists('hash_equals');
+            self::$isHashEqualsAvailable = function_exists('hash_equals');
         }
 
         if (self::$isHashEqualsAvailable) {
-            return \hash_equals($a, $b);
+            return hash_equals($a, $b);
         }
-        if (\strlen($a) !== \strlen($b)) {
+        if (strlen($a) !== strlen($b)) {
             return false;
         }
 
         $result = 0;
-        for ($i = 0; $i < \strlen($a); ++$i) {
-            $result |= \ord($a[$i]) ^ \ord($b[$i]);
+        for ($i = 0; $i < strlen($a); ++$i) {
+            $result |= ord($a[$i]) ^ ord($b[$i]);
         }
 
         return 0 === $result;
@@ -139,7 +159,7 @@ abstract class Util
             $pieces[] = self::urlEncode($k) . '=' . self::urlEncode($v);
         }
 
-        return \implode('&', $pieces);
+        return implode('&', $pieces);
     }
 
     /**
@@ -153,14 +173,14 @@ abstract class Util
         $result = [];
 
         foreach ($params as $key => $value) {
-            $calculatedKey = $parentKey ? "{$parentKey}[{$key}]" : $key;
+            $calculatedKey = $parentKey ? "{$parentKey}[$key]" : $key;
 
             if (self::isList($value)) {
-                $result = \array_merge($result, self::flattenParamsList($value, $calculatedKey));
-            } elseif (\is_array($value)) {
-                $result = \array_merge($result, self::flattenParams($value, $calculatedKey));
+                $result = array_merge($result, self::flattenParamsList($value, $calculatedKey));
+            } elseif (is_array($value)) {
+                $result = array_merge($result, self::flattenParams($value, $calculatedKey));
             } else {
-                \array_push($result, [$calculatedKey, $value]);
+                $result[] = [$calculatedKey, $value];
             }
         }
 
@@ -179,11 +199,11 @@ abstract class Util
 
         foreach ($value as $i => $elem) {
             if (self::isList($elem)) {
-                $result = \array_merge($result, self::flattenParamsList($elem, $calculatedKey));
-            } elseif (\is_array($elem)) {
-                $result = \array_merge($result, self::flattenParams($elem, "{$calculatedKey}[{$i}]"));
+                $result = array_merge($result, self::flattenParamsList($elem, $calculatedKey));
+            } elseif (is_array($elem)) {
+                $result = array_merge($result, self::flattenParams($elem, "{$calculatedKey}[$i]"));
             } else {
-                \array_push($result, ["{$calculatedKey}[{$i}]", $elem]);
+                $result[] = ["{$calculatedKey}[$i]", $elem];
             }
         }
 
@@ -197,19 +217,19 @@ abstract class Util
      */
     public static function urlEncode($key)
     {
-        $s = \urlencode((string)$key);
+        $s = urlencode((string)$key);
 
         // Don't use strict form encoding by changing the square bracket control
         // characters back to their literals. This is fine by the server, and
         // makes these parameter strings easier to read.
-        $s = \str_replace('%5B', '[', $s);
+        $s = str_replace('%5B', '[', $s);
 
-        return \str_replace('%5D', ']', $s);
+        return str_replace('%5D', ']', $s);
     }
 
     public static function normalizeId($id)
     {
-        if (\is_array($id)) {
+        if (is_array($id)) {
             $params = $id;
             $id = $params['id'];
             unset($params['id']);
@@ -227,7 +247,7 @@ abstract class Util
      */
     public static function currentTimeMillis()
     {
-        return (int)\round(\microtime(true) * 1000);
+        return (int)round(microtime(true) * 1000);
     }
 
     public static function getOrDefault($arr, $key, $default = null)

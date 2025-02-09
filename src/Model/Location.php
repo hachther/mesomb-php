@@ -22,8 +22,8 @@ class Location
     public $country;
 
     public function __construct($data) {
-        $this->town = Util::getOrDefault($data, 'town');;
-        $this->region = Util::getOrDefault($data, 'region');;
-        $this->country = Util::getOrDefault($data, 'country');;
+        $this->town = Util::getOrDefault($data, 'town');
+        $this->region = Util::getOrDefault($data, 'region');
+        $this->country = Util::getOrDefault($data, 'country');
     }
 }

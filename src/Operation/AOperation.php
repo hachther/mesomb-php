@@ -39,16 +39,19 @@ abstract class AOperation
      */
     protected $service;
 
+    private $language;
+
     /**
      * @param string $target
      * @param string $accessKey
      * @param string $secretKey
      */
-    protected function __construct($target, $accessKey, $secretKey)
+    protected function __construct($target, $accessKey, $secretKey, $language = 'en')
     {
         $this->target = $target;
         $this->accessKey = $accessKey;
         $this->secretKey = $secretKey;
+        $this->language = $language;
     }
 
     protected function buildUrl($endpoint) {
@@ -104,12 +107,19 @@ abstract class AOperation
         }
     }
 
+    /**
+     * @throws ServiceNotFoundException
+     * @throws PermissionDeniedException
+     * @throws InvalidClientRequestException
+     * @throws ServerException
+     */
     protected function executeRequest($method, $endpoint, $date, $nonce, $body = null, $mode = null) {
         $headers = [
             "x-mesomb-date: ".$date->getTimestamp(),
             'x-mesomb-nonce: '.$nonce,
             'Content-Type: application/json',
             'X-MeSomb-OperationMode: '.$mode,
+            'Accept-Language: '.$this->language,
         ];
         if ($this->service == 'payment') {
             $headers[] = 'X-MeSomb-Application: '.$this->target;
@@ -136,7 +146,7 @@ abstract class AOperation
 
         $client = new CurlClient();
         $url = $this->buildUrl($endpoint);
-        list($rbody, $rcode, $rheaders) = $client->request($method, $url, $headers, $body);
+        list($rbody, $rcode) = $client->request($method, $url, $headers, $body);
         if ($rcode >= 300) {
             $this->processClientException($rcode, $rbody);
         }
