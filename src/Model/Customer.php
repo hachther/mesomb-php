@@ -4,35 +4,48 @@ namespace MeSomb\Model;
 
 use MeSomb\Util\Util;
 
+/**
+ * Class Customer
+ * @package MeSomb\Model
+ * 
+ * @property string|null $email - The customer's email
+ * @property string|null $phone - The customer's phone number
+ * @property string|null $town - The customer's town
+ * @property string|null $region - The customer's region
+ * @property string|null $country - The customer's country
+ * @property string|null $first_name - The customer's first name
+ * @property string $last_name - The customer's last name
+ * @property string|null $address - The customer's address
+ */
 class Customer
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $email;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $phone;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $town;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $region;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $country;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $first_name;
 
@@ -42,7 +55,7 @@ class Customer
     public $last_name;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $address;
 

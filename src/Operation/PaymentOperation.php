@@ -15,6 +15,15 @@ use MeSomb\Util\Util;
 
 /**
  * Containing all operations provided by MeSomb Payment Service.
+ *
+ * Class PaymentOperation
+ *
+ * @package MeSomb\Operation
+ *
+ * @property string $applicationKey Your service application key on MeSomb
+ * @property string $accessKey Your access key provided by MeSomb
+ * @property string $secretKey Your secret key provided by MeSomb
+ * @property string $language The language to be used for the response
  */
 class PaymentOperation extends AOperation
 {
@@ -87,6 +96,7 @@ class PaymentOperation extends AOperation
             'payer' => $params['payer'],
             'country' => Util::getOrDefault($params, 'country', 'CM'),
             'currency' => Util::getOrDefault($params, 'currency', 'XAF'),
+            'amount_currency' => Util::getOrDefault($params, 'currency', 'XAF'),
             'fees' => Util::getOrDefault($params, 'fees', true),
             'conversion' => Util::getOrDefault($params, 'conversion', false),
         ];
@@ -160,6 +170,7 @@ class PaymentOperation extends AOperation
             'receiver' => $params['receiver'],
             'country' => Util::getOrDefault($params, 'country', 'CM'),
             'currency' => Util::getOrDefault($params, 'currency', 'XAF'),
+            'amount_currency' => Util::getOrDefault($params, 'currency', 'XAF'),
         ];
         if (!is_null(Util::getOrDefault($params, 'trxID'))) {
             $body['trxID'] = $params['trxID'];
@@ -242,8 +253,12 @@ class PaymentOperation extends AOperation
     }
 
     /**
-     * @param string $id
-     * @param array $params
+     * @param string $id The transaction's id
+     * @param array{
+     *     amount?: float,
+     *     conversion?: bool,
+     *     currency?: string,
+     * } $params
      * @return TransactionResponse
      * @throws InvalidClientRequestException
      * @throws PermissionDeniedException
@@ -258,6 +273,7 @@ class PaymentOperation extends AOperation
             'id' => $id,
             'conversion' => Util::getOrDefault($params, 'conversion', false),
             'currency' => Util::getOrDefault($params, 'currency', 'XAF'),
+            'amount_currency' => Util::getOrDefault($params, 'currency', 'XAF'),
         ];
         if (!is_null(Util::getOrDefault($params, 'amount'))) {
             $body['amount'] = $params['amount'];

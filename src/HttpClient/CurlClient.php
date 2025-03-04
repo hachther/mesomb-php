@@ -221,6 +221,10 @@ class CurlClient
         } elseif ('post' === $method) {
             $opts[CURLOPT_POST] = 1;
             $opts[CURLOPT_POSTFIELDS] = $hasFile ? $params : json_encode($params, JSON_UNESCAPED_SLASHES);
+        } elseif ('put' === $method) {
+            $opts[CURLOPT_CUSTOMREQUEST] = 'PUT';
+            $opts[CURLOPT_POST] = 1;
+            $opts[CURLOPT_POSTFIELDS] = $hasFile ? $params : json_encode($params, JSON_UNESCAPED_SLASHES);
         } elseif ('delete' === $method) {
             $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
             if (!is_null($params) && count($params) > 0) {

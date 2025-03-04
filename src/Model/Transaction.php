@@ -2,15 +2,22 @@
 
 namespace MeSomb\Model;
 
+/**
+ * Class Transaction
+ * @package MeSomb\Model
+ *
+ * @property Customer[]|null customer - Customer details
+ * @property Product[]|null products - List of products
+ */
 class Transaction extends ATransaction
 {
     /**
-     * @var Customer
+     * @var Customer|null
      */
     public $customer = null;
 
     /**
-     * @var Product[]
+     * @var Product[]|null
      */
     public $products = null;
 

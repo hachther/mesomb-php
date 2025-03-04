@@ -2,6 +2,13 @@
 
 namespace MeSomb\Model;
 
+/**
+ * Class Contribution
+ *
+ * @extends ATransaction
+ *
+ * @property Customer contributor - The contributor
+ */
 class Contribution extends ATransaction
 {
     /**

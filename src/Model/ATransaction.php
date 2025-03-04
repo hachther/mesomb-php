@@ -5,6 +5,26 @@ namespace MeSomb\Model;
 use DateTime;
 use MeSomb\Util\Util;
 
+/**
+ * Class ATransaction
+ * @package MeSomb\Model
+ * 
+ * @property string $pk - Primary key of the transaction
+ * @property string $status - Status of the transaction
+ * @property string $type - Type of the transaction
+ * @property numeric $amount - Amount of the transaction
+ * @property numeric $fees - Fees of the transaction
+ * @property string $b_party - B party of the transaction
+ * @property string $message - Message of the transaction
+ * @property string $service - Service of the transaction
+ * @property string $reference - Reference of the transaction
+ * @property DateTime $date - Date of the transaction
+ * @property string $country - Country of the transaction
+ * @property string $currency - Currency of the transaction
+ * @property string $fin_trx_id - Financial transaction ID of the transaction
+ * @property numeric $trxamount - Total transaction amount
+ * @property Location $location - Location of the transaction
+ */
 abstract class ATransaction
 {
     private $data;
@@ -108,6 +128,8 @@ abstract class ATransaction
     }
 
     /**
+     * Check if the transaction was successful.
+     *
      * @return bool
      */
     public function isSuccess()
@@ -116,6 +138,8 @@ abstract class ATransaction
     }
 
     /**
+     * Check if the transaction is pending.
+     *
      * @return bool
      */
     public function isPending()
@@ -124,6 +148,8 @@ abstract class ATransaction
     }
 
     /**
+     * Check if the transaction is failed.
+     *
      * @return bool
      */
     public function isFailed()

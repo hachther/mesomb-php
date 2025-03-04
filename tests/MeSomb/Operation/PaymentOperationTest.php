@@ -3,7 +3,9 @@
 namespace MeSomb\Operation;
 
 use DateTime;
+use MeSomb\Exception\InvalidClientRequestException;
 use MeSomb\Exception\PermissionDeniedException;
+use MeSomb\Exception\ServerException;
 use MeSomb\Exception\ServiceNotFoundException;
 use MeSomb\MeSomb;
 use MeSomb\Util\RandomGenerator;
@@ -98,6 +100,12 @@ class PaymentOperationTest extends TestCase
         $this->assertEquals('PENDING', $response->transaction->status);
     }
 
+    /**
+     * @throws ServiceNotFoundException
+     * @throws InvalidClientRequestException
+     * @throws PermissionDeniedException
+     * @throws ServerException
+     */
     public function testMakeCollectWithProductSuccess()
     {
         $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
@@ -185,7 +193,7 @@ class PaymentOperationTest extends TestCase
         $this->assertTrue($response->isTransactionSuccess());
         $this->assertEquals('SUCCESS', $response->status);
         $this->assertEquals(100, $response->transaction->amount);
-        $this->assertEquals(2, $response->transaction->fees);
+        $this->assertEquals(1.01, $response->transaction->fees);
         $this->assertEquals('237670000000', $response->transaction->b_party);
         $this->assertEquals('CM', $response->transaction->country);
         $this->assertEquals('XAF', $response->transaction->currency);

@@ -4,6 +4,14 @@ namespace MeSomb\Model;
 
 use MeSomb\Util\Util;
 
+/**
+ * Class Location
+ * @package MeSomb\Model
+ * 
+ * @property string $town - The location's town
+ * @property string|null $region - The location's region
+ * @property string|null $country - The location's country
+ */
 class Location
 {
     /**
@@ -12,12 +20,12 @@ class Location
     public $town;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $region;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $country;
 

@@ -11,6 +11,15 @@ use MeSomb\MeSomb;
 use MeSomb\Signature;
 use MeSomb\Util\Util;
 
+/**
+ * Class AOperation
+ *
+ * @package MeSomb\Operation
+ *
+ * @property string $target Your service application key on MeSomb
+ * @property string $accessKey Your access key provided by MeSomb
+ * @property string $secretKey Your secret key provided by MeSomb
+ */
 abstract class AOperation
 {
     /**
@@ -39,6 +48,9 @@ abstract class AOperation
      */
     protected $service;
 
+    /**
+     * @var mixed|string
+     */
     private $language;
 
     /**
@@ -54,6 +66,10 @@ abstract class AOperation
         $this->language = $language;
     }
 
+    /**
+     * @param $endpoint
+     * @return string
+     */
     protected function buildUrl($endpoint) {
         $host = MeSomb::$apiBase;
         $apiVersion = MeSomb::$apiVersion;
@@ -119,6 +135,7 @@ abstract class AOperation
             'x-mesomb-nonce: '.$nonce,
             'Content-Type: application/json',
             'X-MeSomb-OperationMode: '.$mode,
+            'X-MeSomb-Source: MeSombPHP/v'.MeSomb::$version,
             'Accept-Language: '.$this->language,
         ];
         if ($this->service == 'payment') {
@@ -134,10 +151,7 @@ abstract class AOperation
             $headers[] = 'X-MeSomb-TrxID: '.$body['trxID'];
             unset($body['trxID']);
         }
-        if ($body) {
-            $body['source'] = 'MeSombPHP/v'.MeSomb::$version;
-        }
-        if ($method == 'POST') {
+        if ($method != 'GET') {
             $authorization = $this->getAuthorization($method, $endpoint, $date, $nonce, ['content-type' => 'application/json'], $body);
         } else {
             $authorization = $this->getAuthorization($method, $endpoint, $date, $nonce);

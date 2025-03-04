@@ -2,6 +2,21 @@
 
 namespace MeSomb\Model;
 
+/**
+ * Class Application
+ * @package MeSomb\Model
+ *
+ * This class represents an application at MeSomb
+ *
+ * @property string $key Application key
+ * @property string|null $logo url of your logo
+ * @property array $balances your current balance in your different account
+ * @property array $countries list of countries where your service is available
+ * @property string|null $description description of your service at MeSomb
+ * @property string $name the name of your service
+ * @property array $security security setting of your service at MeSomb
+ * @property string|null $url the url of your service
+ */
 class Application
 {
     private $data;

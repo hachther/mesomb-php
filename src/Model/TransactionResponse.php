@@ -2,24 +2,35 @@
 
 namespace MeSomb\Model;
 
+/**
+ * Class Transaction
+ * @package MeSomb\Model
+ *
+ * @property bool $success - Indicates if the operation was successful.
+ * @property string|null $message - Message associated with the transaction response.
+ * @property string|null $redirect - URL to redirect if needed.
+ * @property Transaction $transaction - The transaction details.
+ * @property string|null $reference - Reference ID of the transaction.
+ * @property string $status - Status of the transaction.
+ */
 class TransactionResponse
 {
-    /** @var bool|mixed */
+    /** @var bool */
     public $success;
 
-    /** @var string|mixed|null  */
+    /** @var string|null  */
     public $message;
 
-    /** @var string|mixed|null  */
+    /** @var string|null  */
     public $redirect;
 
     /** @var Transaction */
     public $transaction;
 
-    /** @var string|mixed|null  */
+    /** @var string|null  */
     public $reference;
 
-    /** @var string|mixed  */
+    /** @var string  */
     public $status;
 
     public function __construct($data)
@@ -32,11 +43,21 @@ class TransactionResponse
         $this->status = $data['status'];
     }
 
+    /**
+     * Check if the operation was successful.
+     *
+     * @return bool
+     */
     public function isOperationSuccess()
     {
         return $this->success;
     }
 
+    /**
+     * Check if the transaction was successful.
+     *
+     * @return bool
+     */
     public function isTransactionSuccess() {
         return $this->transaction && $this->transaction->isSuccess();
     }
