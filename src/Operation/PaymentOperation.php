@@ -233,6 +233,7 @@ class PaymentOperation extends AOperation
      * Reprocess transaction at the operators level to confirm the status of a transaction
      *
      * @param array $ids list of ids
+     * @param string $source the source of the transaction
      *
      * @return Transaction[]|void
      * @throws InvalidClientRequestException

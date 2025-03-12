@@ -268,11 +268,33 @@ class WalletOperation extends AOperation
      * @throws PermissionDeniedException
      * @throws ServerException
      */
-    public function getTransactions($page = 1, $wallet = null)
+    public function listTransactions($page = 1, $wallet = null)
     {
         $endpoint = "wallet/transactions/?page=$page".($wallet ? "&wallet=$wallet" : '');
 
         return new PaginatedWalletTransactions($this->executeRequest('GET', $endpoint, new DateTime(), RandomGenerator::nonce(), []));
+    }
+
+    /**
+     * Get the transactions of a wallet
+     *
+     * @param array $ids ID the wallet to get transactions
+     * @param string $source the source of the transaction
+     *
+     * @return WalletTransaction[]
+     *
+     * @throws ServiceNotFoundException
+     * @throws InvalidClientRequestException
+     * @throws PermissionDeniedException
+     * @throws ServerException
+     */
+    public function getTransactions(array $ids, $source = 'MESOMB')
+    {
+        $endpoint = "wallet/transactions/search/?".implode('&', array_map(function ($id) {return 'ids='.$id;}, $ids))."&source=".$source;
+
+        return array_map(function ($v) {
+            return new WalletTransaction($v);
+        }, $this->executeRequest('GET', $endpoint, new DateTime(), RandomGenerator::nonce()));
     }
 
     /**

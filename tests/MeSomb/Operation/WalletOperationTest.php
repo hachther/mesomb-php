@@ -140,23 +140,31 @@ class WalletOperationTest extends TestCase
         $this->assertNotNull($transaction->date);
     }
 
-    public function testShouldGetPaginatedTransactionsWithSuccess()
+    public function testShouldListTransactionsWithSuccess()
     {
         $client = new WalletOperation($this->providerKey, $this->accessKey, $this->secretKey);
-        $transactions = $client->getTransactions(1);
+        $transactions = $client->listTransactions(1);
 
         $this->assertGreaterThan(0, $transactions->count);
         $this->assertNull($transactions->previous);
         $this->assertGreaterThan( 0, count($transactions->results));
     }
 
-    public function testShouldGetPaginatedTransactionsForWalletWithSuccess()
+    public function testShouldListTransactionsForWalletWithSuccess()
     {
         $client = new WalletOperation($this->providerKey, $this->accessKey, $this->secretKey);
-        $transactions = $client->getTransactions(1, 228);
+        $transactions = $client->listTransactions(1, 228);
 
         $this->assertGreaterThan(0, $transactions->count);
         $this->assertNull($transactions->previous);
         $this->assertGreaterThan( 0, count($transactions->results));
+    }
+
+    public function testShouldGetTransactionsWithSuccess()
+    {
+        $client = new WalletOperation($this->providerKey, $this->accessKey, $this->secretKey);
+
+        $transactions = $client->getTransactions([620665]);
+        $this->assertGreaterThan(0, count($transactions));
     }
 }
