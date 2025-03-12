@@ -226,7 +226,7 @@ class PaymentOperationTest extends TestCase
     {
         $payment = new PaymentOperation($this->applicationKey . "f", $this->accessKey, $this->secretKey);
         $this->expectException(ServiceNotFoundException::class);
-        $payment->getTransactions(['c6c40b76-8119-4e93-81bf-bfb55417b392']);
+        $payment->getTransactions(['c6c40b76-8119-4e93-81bf-bfb55417b392', 'c6c40b76-8119-4e93-81bf-bfb55417b393']);
     }
 
     public function testGetTransactionsWithPermissionDenied()

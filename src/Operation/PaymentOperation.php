@@ -222,7 +222,7 @@ class PaymentOperation extends AOperation
         assert(count($ids) > 0);
         assert($source == 'MESOMB' || $source == 'EXTERNAL');
 
-        $endpoint = "payment/transactions/?ids=".implode(',', $ids)."&source=".$source;
+        $endpoint = "payment/transactions/?".implode('&', array_map(function ($id) {return 'ids='.$id;}, $ids))."&source=".$source;
 
         return array_map(function ($v) {
             return new Transaction($v);
@@ -245,7 +245,7 @@ class PaymentOperation extends AOperation
         assert(count($ids) > 0);
         assert($source == 'MESOMB' || $source == 'EXTERNAL');
 
-        $endpoint = "payment/transactions/check/?ids=".implode(',', $ids)."&source=".$source;
+        $endpoint = "payment/transactions/?".implode('&', array_map(function ($id) {return 'ids='.$id;}, $ids))."&source=".$source;
 
         return array_map(function ($v) {
             return new Transaction($v);
