@@ -1,3 +1,11 @@
+# 3.0.0 (2025-03-24)
+
+## Added
+
+- Add airtime purchase operation operations
+- Rename getTransaction to listTransactions
+- Add getTransactions to get transaction by ids and source
+
 # 3.0.0 (2025-03-04)
 
 ## Added
