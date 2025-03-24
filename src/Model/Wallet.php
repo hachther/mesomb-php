@@ -88,9 +88,8 @@ class Wallet
     public function __construct($data)
     {
         $this->data = $data;
-        print_r($data);
 
-        $this->id = $data['identifier'];
+        $this->id = $data['id'];
         $this->number = $data['number'];
         $this->country = $data['country'];
         $this->status = $data['status'];

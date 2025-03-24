@@ -20,7 +20,6 @@ class Signature
     public static function signRequest($service, $method, $url, DateTime $date, $nonce, array $credentials, array $headers = [], array $body = null)
     {
         $algorithm = MeSomb::$algorithm;
-        // print_r($algorithm);
         $parse = parse_url($url);
         $canonicalQuery = isset($parse['query']) ? $parse['query'] : '';
 
@@ -36,9 +35,7 @@ class Signature
         $callback = function ($k, $v) {
             return strtolower($k) . ":" . $v;
         };
-        // print_r($headers);
         $canonicalHeaders = implode("\n", array_map($callback, array_keys($headers), array_values($headers)));
-        // print_r($canonicalHeaders);
 
         if (!isset($body)) {
             $body = "{}";
