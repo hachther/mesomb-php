@@ -65,7 +65,8 @@ class FundraisingOperation extends AOperation
      * @throws ServiceNotFoundException
      * @throws PermissionDeniedException
      */
-    public function makeContribution(array $params) {
+    public function makeContribution(array $params): ContributionResponse
+    {
         $endpoint = 'fundraising/contribute/';
 
         if (Util::getOrDefault($params, 'anonymous', false) !== true) {

@@ -171,6 +171,14 @@ $response = $client->getTransactions(['a483a9e8-51d7-44c9-875b-1305b1801274']);
 print_r($response);
 ```
 
+## Legacy Version Support
+
+### PHP 5.4 & 5.5
+
+If you are using PHP 5.4 or 5.5, you should consider upgrading your environment as those versions have been past end of life since September 2015 and July 2016 respectively. 
+Otherwise, you can still use MeSomb by downloading mesomb-php 3.1.0 (zip, tar.gz) from our releases page. 
+This version will work but might not support recent features we added since the version was released and upgrading PHP is the best course of action.
+
 ## Documentation
 
 ### Payment

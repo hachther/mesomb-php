@@ -17,8 +17,12 @@ class Signature
      * @param array|null $body The dict containing the body you send in your request body
      * @return string Authorization to put in the header
      */
-    public static function signRequest($service, $method, $url, DateTime $date, $nonce, array $credentials, array $headers = [], array $body = null)
+    public static function signRequest($service, $method, $url, DateTime $date, $nonce, array $credentials, array $headers = [], array $body = null): string
     {
+        if (version_compare(phpversion(), '7.1', '>=')) {
+            ini_set( 'serialize_precision', -1 );
+        }
+
         $algorithm = MeSomb::$algorithm;
         $parse = parse_url($url);
         $canonicalQuery = isset($parse['query']) ? $parse['query'] : '';

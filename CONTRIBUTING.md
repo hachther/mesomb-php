@@ -33,10 +33,10 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ## Getting Started
 
-1. **Fork the Repository**: Start by forking the [mesomb-php repository](https://github.com/your-username/mesomb-php) to your GitHub account.
+1. **Fork the Repository**: Start by forking the [mesomb-php repository](https://github.com/hachther/mesomb-php) to your GitHub account.
 2. **Clone the Repository**: Clone your forked repository to your local machine:
    ```bash
-   git clone https://github.com/your-username/mesomb-php.git
+   git clone https://github.com/hachther/mesomb-php.git
    cd mesomb-php
    ```
 3. **Set Up Upstream**: Add the original repository as an upstream remote:

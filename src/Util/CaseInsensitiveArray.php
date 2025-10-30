@@ -33,7 +33,7 @@ class CaseInsensitiveArray implements ArrayAccess, Countable, IteratorAggregate
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->container);
     }
@@ -41,7 +41,7 @@ class CaseInsensitiveArray implements ArrayAccess, Countable, IteratorAggregate
     /**
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->container);
     }
@@ -49,7 +49,7 @@ class CaseInsensitiveArray implements ArrayAccess, Countable, IteratorAggregate
     /**
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $offset = static::maybeLowercase($offset);
         if (null === $offset) {
@@ -62,7 +62,7 @@ class CaseInsensitiveArray implements ArrayAccess, Countable, IteratorAggregate
     /**
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         $offset = static::maybeLowercase($offset);
 
@@ -70,25 +70,27 @@ class CaseInsensitiveArray implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
+     * @param $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $offset = static::maybeLowercase($offset);
         unset($this->container[$offset]);
     }
 
     /**
+     * @param $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         $offset = static::maybeLowercase($offset);
 
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
-    private static function maybeLowercase($v)
+    private static function maybeLowercase($v): mixed
     {
         if (is_string($v)) {
             return strtolower($v);

@@ -70,7 +70,8 @@ abstract class AOperation
      * @param $endpoint
      * @return string
      */
-    protected function buildUrl($endpoint) {
+    protected function buildUrl($endpoint): string
+    {
         $host = MeSomb::$apiBase;
         $apiVersion = MeSomb::$apiVersion;
         return "$host/api/$apiVersion/$endpoint";
@@ -85,7 +86,7 @@ abstract class AOperation
      * @param array|null $body
      * @return string
      */
-    protected function getAuthorization($method, $endpoint, $date, $nonce, array $headers = [], array $body = null)
+    protected function getAuthorization($method, $endpoint, $date, $nonce, array $headers = [], array $body = null): string
     {
         $url = $this->buildUrl($endpoint);
 
