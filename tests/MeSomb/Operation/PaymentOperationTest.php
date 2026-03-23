@@ -273,4 +273,12 @@ class PaymentOperationTest extends TestCase
         $this->assertCount(1, $response);
         $this->assertEquals('a483a9e8-51d7-44c9-875b-1305b1801274', $response[0]->pk);
     }
+
+    public function testGetContactInfoSuccess()
+    {
+        $payment = new PaymentOperation($this->applicationKey, $this->accessKey, $this->secretKey);
+        $response = $payment->checkContact('237670000000', 'MTN');
+        $this->assertEquals('Sand', $response->firstName);
+        $this->assertEquals('BOX', $response->lastName);
+    }
 }

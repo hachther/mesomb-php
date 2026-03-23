@@ -1,4 +1,17 @@
-# 3.0.0 (2025-03-24)
+# 3.1.2 (2026-03-23)
+
+## Added
+
+- Add a method to check contact-first and last name (checkContact)
+
+# 3.1.1 (2025-10-30)
+
+## Added
+
+- Add type hints for methods and update documentation
+- Increase default timeout to 300 seconds
+
+# 3.1.0 (2025-03-24)
 
 ## Added
 

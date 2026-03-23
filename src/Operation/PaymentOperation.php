@@ -8,6 +8,7 @@ use MeSomb\Exception\PermissionDeniedException;
 use MeSomb\Exception\ServerException;
 use MeSomb\Exception\ServiceNotFoundException;
 use MeSomb\Model\Application;
+use MeSomb\Model\ContactInfo;
 use MeSomb\Model\Transaction;
 use MeSomb\Model\TransactionResponse;
 use MeSomb\Util\RandomGenerator;
@@ -351,5 +352,30 @@ class PaymentOperation extends AOperation
         }
 
         return new TransactionResponse($this->executeRequest('POST', $endpoint, new DateTime(), Util::getOrDefault($params, 'nonce', RandomGenerator::nonce()), $body, Util::getOrDefault($params, 'mode', 'synchronous')));
+    }
+
+    /**
+     * @param string $phone The contact's phone number.
+     * @param string $provider The service provider associated with the contact.
+     * @param string $country The contact's country code, default is 'CM'.
+     * @return ContactInfo The response array from the contact verification process.
+     * @throws InvalidClientRequestException
+     * @throws PermissionDeniedException
+     * @throws ServerException
+     * @throws ServiceNotFoundException
+     */
+    public function checkContact(string $phone, string $provider, string $country = 'CM'): ContactInfo
+    {
+        $endpoint = 'payment/contact/info/';
+
+        $body = [
+            'phone_number' => $phone,
+            'provider' => $provider,
+            'country' => $country,
+        ];
+
+        $data = $this->executeRequest('POST', $endpoint, new DateTime(), RandomGenerator::nonce(), $body, 'synchronous');
+
+        return ContactInfo::fromArray($data);
     }
 }
